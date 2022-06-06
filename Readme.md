@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм»
 
 * Студент: [Георгий Харламов](https://up.htmlacademy.ru/javascript/26/user/1826947).
-* Наставник: `Неизвестно`.
+* Наставник: [Никита Сигов](https://htmlacademy.ru/profile/crazer).
 
 ---
 
