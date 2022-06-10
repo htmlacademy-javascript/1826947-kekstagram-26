@@ -11,7 +11,7 @@ function randomNumber (minNumer, maxNumber) {
 
 
 function checkStringLength (targetString, maxString) {
-  if (targetString > maxString) {
+  if (targetString.length > maxString) {
     return false;
   }
 
