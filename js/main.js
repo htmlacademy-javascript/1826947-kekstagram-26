@@ -121,5 +121,3 @@ const createPhotos = () => {
 
   return photos;
 }
-
-console.log(createPhotos());
