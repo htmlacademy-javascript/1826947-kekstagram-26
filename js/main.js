@@ -31,7 +31,6 @@ function checkStringLength (targetString, maxString) {
   avatar = img/avatar-{{случайное число от 1 до 6}}.svg
  */
 
-const POSTID = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25];
 
 const DESCRIPTION = [
   'Классный был день.',
@@ -50,7 +49,7 @@ const MINLIKES = 14;
 
 const MAXLIKES = 200;
 
-const COMMENTID = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40];
+const COMMENTID = getrandomNumber (1, 100);
 
 const MESSAGE = [
   'Всё отлично!',
@@ -79,7 +78,9 @@ const NAME = [
   'Татьяна'
 ];
 
-const AVATAR = [1, 2, 3, 4, 5, 6];
+const MINAVATAR = 1;
+
+const MAXAVATAR = 6;
 
 function shuffle(array) {
   let currentIndex = array.length, temporaryValue, randomIndex ;
@@ -94,25 +95,45 @@ function shuffle(array) {
     array[randomIndex] = temporaryValue;
   }
 
+  console.log(array);
   return array;
 }
 
-const createPost = () => {;
-
+const createPost = (id) => {
   return {
-    id: POSTID[shuffle(POSTID)],
-    url: 'photos/' + POSTID[shuffle(POSTID)] + '.jpg',
+    id: id,
+    url: 'photos/' + id + '.jpg',
     description: DESCRIPTION[getrandomNumber(0, DESCRIPTION.length - 1)],
     likes: getrandomNumber(MINLIKES, MAXLIKES),
   }
 }
 
-const createComment = () => {
-
+const createComment = (id) => {
   return {
-    id: COMMENTID[shuffle(COMMENTID)],
-    avatar: AVATAR[getrandomNumber (0, AVATAR.length - 1)],
+    id: id,
+    avatar: 'img/avatar-' + getrandomNumber (MINAVATAR, MAXAVATAR) + '.svg',
     message: MESSAGE[getrandomNumber (0, MESSAGE.length - 1)],
     name: NAME[getrandomNumber (0, NAME.length - 1)],
   }
 }
+
+const createPhotos = () => {
+  const photos = [];
+
+  for (let i = 0; i < 25; i++) {
+    const post = createPost(i + 1);
+    const comments = [];
+
+    for (let j = 0; j < 3; j++) {
+      const comment = createComment(j + 1);
+      comments.push(comment);
+    }
+
+    post.comments = comments;
+    photos.push(post);
+  }
+
+  return photos;
+}
+
+console.log(createPhotos());
