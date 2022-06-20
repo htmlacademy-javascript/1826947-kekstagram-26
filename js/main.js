@@ -31,9 +31,9 @@ const DESCRIPTION = [
   'ВОТ ЭТО ВЕЗЕНИЕ'
 ];
 
-const MINLIKES = 14;
+const MIN_LIKES = 14;
 
-const MAXLIKES = 200;
+const MAX_LIKES = 200;
 
 const MESSAGE = [
   'Всё отлично!',
@@ -62,9 +62,9 @@ const NAME = [
   'Татьяна'
 ];
 
-const MINAVATAR = 1;
+const MIN_AVATAR = 1;
 
-const MAXAVATAR = 6;
+const MAX_AVATAR = 6;
 
 function shuffle(array) {
   let currentIndex = array.length, temporaryValue, randomIndex ;
@@ -87,14 +87,14 @@ const createPost = (id) => {
     id: id,
     url: 'photos/' + id + '.jpg',
     description: DESCRIPTION[getrandomNumber(0, DESCRIPTION.length - 1)],
-    likes: getrandomNumber(MINLIKES, MAXLIKES),
+    likes: getrandomNumber(MIN_LIKES, MAX_LIKES),
   }
 }
 
 const createComment = (id) => {
   return {
     id: id,
-    avatar: 'img/avatar-' + getrandomNumber (MINAVATAR, MAXAVATAR) + '.svg',
+    avatar: 'img/avatar-' + getrandomNumber (MIN_AVATAR, MAX_AVATAR) + '.svg',
     message: MESSAGE[getrandomNumber (0, MESSAGE.length - 1)],
     name: NAME[getrandomNumber (0, NAME.length - 1)],
   }
