@@ -57,23 +57,19 @@ const MIN_AVATAR = 1;
 
 const MAX_AVATAR = 6;
 
-const createPost = (id) => {
-  return {
-    id: id,
-    url: 'photos/' + id + '.jpg',
-    description: DESCRIPTION[getrandomNumber(0, DESCRIPTION.length - 1)],
-    likes: getrandomNumber(MIN_LIKES, MAX_LIKES)
-  }
-}
+const createPost = (id) => ({
+  id: id,
+  url: `photos/${id}.jpg`,
+  description: DESCRIPTION[getrandomNumber(0, DESCRIPTION.length - 1)],
+  likes: getrandomNumber(MIN_LIKES, MAX_LIKES)
+});
 
-const createComment = (id) => {
-  return {
-    id: id,
-    avatar: 'img/avatar-' + getrandomNumber (MIN_AVATAR, MAX_AVATAR) + '.svg',
-    message: MESSAGE[getrandomNumber (0, MESSAGE.length - 1)],
-    name: NAME[getrandomNumber (0, NAME.length - 1)];
-  }
-}
+const createComment = (id) => ({
+  id: id,
+  avatar: `img/avatar-${getrandomNumber (MIN_AVATAR, MAX_AVATAR)}.svg`,
+  message: MESSAGE[getrandomNumber (0, MESSAGE.length - 1)],
+  name: NAME[getrandomNumber (0, NAME.length - 1)]
+});
 
 const createPhotos = () => {
   const photos = [];
@@ -92,4 +88,6 @@ const createPhotos = () => {
   }
 
   return photos;
-}
+};
+
+createPhotos();
