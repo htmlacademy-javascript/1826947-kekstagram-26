@@ -35,8 +35,6 @@ const MINLIKES = 14;
 
 const MAXLIKES = 200;
 
-const COMMENTID = getrandomNumber (1, 100);
-
 const MESSAGE = [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
@@ -81,7 +79,6 @@ function shuffle(array) {
     array[randomIndex] = temporaryValue;
   }
 
-  console.log(array);
   return array;
 }
 
