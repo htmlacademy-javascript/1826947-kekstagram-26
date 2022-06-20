@@ -9,15 +9,6 @@ function getrandomNumber (minNumer, maxNumber) {
   return Math.floor(Math.random() * (maxNumber - minNumer)) + minNumer;
 }
 
-
-function checkStringLength (targetString, maxString) {
-  if (targetString.length > maxString) {
-    return false;
-  }
-
-  return true;
-}
-
 const DESCRIPTION = [
   'Классный был день.',
   'Ням, ням, ням',
@@ -65,22 +56,6 @@ const NAME = [
 const MIN_AVATAR = 1;
 
 const MAX_AVATAR = 6;
-
-function shuffle(array) {
-  let currentIndex = array.length, temporaryValue, randomIndex ;
-
-  while (0 !== currentIndex) {
-
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
-
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
-  }
-
-  return array;
-}
 
 const createPost = (id) => {
   return {
