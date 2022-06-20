@@ -62,7 +62,7 @@ const createPost = (id) => {
     id: id,
     url: 'photos/' + id + '.jpg',
     description: DESCRIPTION[getrandomNumber(0, DESCRIPTION.length - 1)],
-    likes: getrandomNumber(MIN_LIKES, MAX_LIKES),
+    likes: getrandomNumber(MIN_LIKES, MAX_LIKES)
   }
 }
 
@@ -71,7 +71,7 @@ const createComment = (id) => {
     id: id,
     avatar: 'img/avatar-' + getrandomNumber (MIN_AVATAR, MAX_AVATAR) + '.svg',
     message: MESSAGE[getrandomNumber (0, MESSAGE.length - 1)],
-    name: NAME[getrandomNumber (0, NAME.length - 1)],
+    name: NAME[getrandomNumber (0, NAME.length - 1)];
   }
 }
 
