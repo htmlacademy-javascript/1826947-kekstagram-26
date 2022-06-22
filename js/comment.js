@@ -1,4 +1,4 @@
-import {getrandomNumber} from '../js/util.js';
+import {getrandomNumber} from './util.js';
 
 const MESSAGE = [
   'Всё отлично!',

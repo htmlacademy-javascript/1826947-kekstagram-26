@@ -1,6 +1,6 @@
-import {createComment} from '../js/comment.js';
+import {createComment} from './comment.js';
 
-import {createPost} from '../js/post.js';
+import {createPost} from './post.js';
 
 const createPhotos = () => {
   const photos = [];
