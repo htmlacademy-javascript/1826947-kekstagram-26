@@ -1,12 +1,12 @@
 import {createComment} from './comment.js';
 
-import {createPost} from './post.js';
+import {createPhoto} from './photo.js';
 
 const createPhotos = () => {
   const photos = [];
 
   for (let i = 0; i < 25; i++) {
-    const post = createPost(i + 1);
+    const post = createPhoto(i + 1);
     const comments = [];
 
     for (let j = 0; j < 3; j++) {
