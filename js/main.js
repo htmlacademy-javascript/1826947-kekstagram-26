@@ -1,3 +1,5 @@
 import {createPhotos} from './photos.js';
 
-createPhotos();
+import {drawPicture} from './picture.js';
+
+drawPicture(createPhotos());

@@ -17,11 +17,11 @@ const MIN_LIKES = 14;
 
 const MAX_LIKES = 200;
 
-const createPost = (id) => ({
+const createPhoto = (id) => ({
   id: id,
   url: `photos/${id}.jpg`,
   description: DESCRIPTION[getrandomNumber(0, DESCRIPTION.length - 1)],
   likes: getrandomNumber(MIN_LIKES, MAX_LIKES)
 });
 
-export {createPost};
+export {createPhoto};
