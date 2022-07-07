@@ -3,24 +3,46 @@ const bigPictureTemplate = document.querySelector('.big-picture');
 const commentsTemplate = bigPictureTemplate.querySelector('.social__comments')
   .content.querySelector('.social__comment');
 
-const openBigPicture = function (bigPhotos) {
-  bigPictureTemplate.classList.remove('hidden');
+const closeBigPicture = document.querySelector('#picture-cancel');
 
-  bigPhotos.forEach((bigPhoto) => {
-    const bigPhotoElement = bigPictureTemplate.cloneNode(true);
-    bigPhotoElement.querySelector('.big-picture__img').src = bigPhoto.url;
-    bigPhotoElement.querySelector('.likes-count').textContent = bigPhoto.likes;
-    bigPhotoElement.querySelector('.comments-count').textContent = bigPhoto.comments.length;
-    const bigPhotoComments = commentsTemplate.cloneNode(true);
-    bigPhotoComments.querySelector('.social__picture').src = bigPhoto.comments.avatar;
-    bigPhotoComments.querySelector('.social__picture').alt = bigPhoto.comments.name;
-    bigPhotoComments.querySelector('social__text').textContent = bigPhoto.comments.message;
-    bigPhotoComments.append(commentsTemplate);
-    bigPhotoElement.querySelector('.social__caption').textContent = bigPhoto.description;
+const addBigPictureHandler = function (photos) {
+  bigPictureTemplate.addEventListener('click', () => {
+    for (let i = 0; i < bigPictureTemplate.length; i++) {
+      bigPictureTemplate.querySelector('.big-picture__img').src = photos[i].url;
+      bigPictureTemplate.querySelector('.likes-count').textContent = photos[i].likes;
+      bigPictureTemplate.querySelector('.comments-count').textContent = photos[i].comments.length;
+
+      const bigPhotoComments = commentsTemplate.cloneNode(true);
+      for (let j = 0; j < bigPhotoComments.length; j++) {
+        bigPhotoComments[j].querySelector('.social__picture').src = photos[i].comments[j].avatar;
+        bigPhotoComments[j].querySelector('.social__picture').alt = photos[i].comments[j].name;
+        bigPhotoComments[j].querySelector('social__text').textContent = photos[i].comments[j].message;
+        bigPhotoComments[j].append(commentsTemplate);
+      }
+    }
+
+    bigPictureTemplate.querySelector('.social__caption').textContent = photos.description;
     bigPictureTemplate.querySelector('.social__comment-count').add('.hidden');
     bigPictureTemplate.querySelector('.comments-loader').classList.add('.hidden');
     document.querySelector('body').classList.add('.modal-open');
   });
 };
 
-export {openBigPicture};
+closeBigPicture.addEventListener('click', () => {
+  bigPictureTemplate.classList.add('hidden');
+  bigPictureTemplate.querySelector('.social__comment-count').remove('.hidden');
+  bigPictureTemplate.querySelector('.comments-loader').classList.remove('.hidden');
+  document.querySelector('body').classList.remove('.modal-open');
+});
+
+document.addEventListener('keydown', (evt) => {
+  evt.preventDefault();
+  if (KeyboardEvent.keyCode === 27) {
+    bigPictureTemplate.classList.add('hidden');
+    bigPictureTemplate.querySelector('.social__comment-count').classList.remove('.hidden');
+    bigPictureTemplate.querySelector('.comments-loader').classList.remove('.hidden');
+    document.querySelector('body').classList.remove('.modal-open');
+  }
+});
+
+export {addBigPictureHandler};

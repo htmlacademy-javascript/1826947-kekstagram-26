@@ -2,8 +2,8 @@ import {createPhotos} from './photos.js';
 
 import {drawPicture} from './picture.js';
 
-import {openBigPicture} from './bigpicture.js';
+import {addBigPictureHandler} from './bigpicture.js';
 
 drawPicture(createPhotos());
 
-openBigPicture(createPhotos());
+addBigPictureHandler(createPhotos());
