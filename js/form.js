@@ -1,47 +1,32 @@
-/*
-1. Пропишите тегу form правильные значения атрибутов method и адрес action для отправки.
-  Если форма заполнина правильно, то после отправки покажется страница сервера (action тега form).
-  Если форма заполнена НЕправильно, то покажется страница с ошибками.
-  Идеально, чтобы не существовало сценария с неккоректно отправвленными данными.
+import {isEscapeKey} from './util.js';
 
-2.Проверить HTML разметку проекта и дополнить недостающие атрибуты параметрами.
-
-3. Изучить, что значит загрузка img, как, когда и каким образом показывается форма ред. img.
-  Напишите код и добавьте необходимые обработчики для реализации этого пункта техзадания.
-  В работе вы можете опираться на код показа окна с полноразмерной фотографией, который вы, возможно, уже написали в предыдущей домашней работе.
-
-  выбор файла с изображением для загрузки;
-  изменение масштаба изображения;
-  применение одного из заранее заготовленных эффектов;
-  выбор глубины эффекта с помощью ползунка;
-  добавление текстового комментария;
-  добавление хэш-тегов.
-
-  4. Реализовать закрытие формы.
-
-  Обратите внимание, что при закрытии формы дополнительно необходимо сбрасывать значение поля выбора файла '#upload-file' .
-
-5. Код для валидации формы должен быть для :
-  Хэш-теги
-  Комментарий
-*/
 const form = document.querySelector('.img-upload__form');
 
 const uploadPole = form.querySelector('#upload-file');
+
+const preview = form.querySelector('.img-upload__preview');
 
 const uploadOverlay = form.querySelector('.img-upload__overlay');
 
 const cancelUpload = form.querySelector('#upload-cancel');
 
-const reduceImg = form.querySelector('.scale__control--smaller');
+const scalePhoto = form.querySelector('.img-upload__scale');
+
+const photoScaleMassive = [0.25, 0.5, 0.75, 1];
 
 const depthEffect = form.querySelector('.effect-level__value');
-
-const increaseImg = form.querySelector('.scale__control--bigger');
 
 const success = document.querySelector('#success');
 
 const error = document.querySelector('#error');
+
+
+const onPopupEscKeydown = (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    closeUploadOverlay();
+  }
+};
 
 const pristine = new Pristine(form, {
   classTo: 'img-upload__form',
@@ -57,21 +42,54 @@ const uploadPicture = (picture) => {
   document.querySelector('body').classList.add('modal-open');
 };
 
-reduceImg('click', () => {
-  uploadPole.width /= 0.25;
-  uploadPole.height /= 0.25;
-  return uploadPole.width >= 0.25;
-});
+pristine.addValidator(form.querySelector('[name="filename"]'),
+  uploadPicture, 'Загрузите фотографию');
 
-pristine.addValidator(reduceImg);
+function onEffectChoose (value) {
+  return preview.classList.add(`.effects__preview--${value}`);
+}
 
-increaseImg('click', () => {
-  uploadPole.width *= 0.25;
-  uploadPole.height *= 0.25;
-  return uploadPole.width <= 1;
-});
+pristine.addValidator(form.querySelector('[name="effect"]:checked'),
+  onEffectChoose, 'Выберите один из эффектов');
 
-pristine.addValidator(increaseImg);
+function onEffectIntensive (value) {
+  if (value !== 'none') {
+    let min = 0;
+    let max = 1;
+    if (value === 'blur') {
+      max = 3;
+      if (value === 'brightness') {
+        min = 1;
+      }
+    }
+    return value.length >= min && value.length <= max;
+  }
+  return depthEffect.classList.add('.hidden');
+}
+
+pristine.addValidator(form.querySelector('[name="effect-level"]'),
+  onEffectIntensive(form.querySelector('[name="effect"]:checked')),
+  'Выберите интенсивность применения эффекта');
+
+function changePhotoScale () {
+  const maxScale = photoScaleMassive.length - 1;
+  const minScale = photoScaleMassive[0];
+  scalePhoto.querySelector('.scale__control--smaller')
+    .addEventListener('click', () => {
+      photoScaleMassive.length --;
+    });
+
+  scalePhoto.querySelector('.scale__control--bigger')
+    .addEventListener('click', () => {
+      photoScaleMassive.length ++;
+    });
+
+  return changePhotoScale >= minScale && changePhotoScale <= maxScale;
+}
+
+
+pristine.addValidator(form.querySelector('[name="scale"]'),
+  changePhotoScale(), 'Фотография не может быть меньше 25% от её размера и больше изначального');
 
 function validateHashtags (value) {
   if (value === re) {
@@ -92,20 +110,30 @@ function validateComments (value) {
 pristine.addValidator(form.querySelector('[name="description"]'),
   validateComments, 'не более 140 символов');
 
+
+function openUploadOverlay () {
+  uploadOverlay.classList.remove('hidden');
+  document.addEventListener('keydown', onPopupEscKeydown);
+  document.querySelector('body').classList.add('.modal-open');
+}
+
+function closeUploadOverlay () {
+  uploadOverlay.classList.add('hidden');
+  document.removeEventListener('keydown', onPopupEscKeydown);
+  document.querySelector('body').classList.remove('.modal-open');
+}
+
+uploadPole.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  openUploadOverlay();
+});
+
 form.addEventListener('submit', (evt) => {
   evt.preventDefault();
   pristine.validate();
+  closeUploadOverlay();
 });
 
 cancelUpload.addEventListener('click', () => {
-  uploadOverlay.classList.add('hidden');
-  document.querySelector('body').classList.remove('.modal-open');
-});
-
-document.addEventListener('keydown', (evt) => {
-  evt.preventDefault();
-  if (KeyboardEvent.keyCode === 27) {
-    uploadOverlay.classList.add('hidden');
-    document.querySelector('body').classList.remove('.modal-open');
-  }
+  closeUploadOverlay ();
 });
