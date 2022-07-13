@@ -1,4 +1,4 @@
-import {isEscapeKey,} from './util.js';
+import {isEscapeKey} from './util.js';
 
 const bigPictureTemplate = document.querySelector('.big-picture');
 
@@ -23,7 +23,6 @@ const drawBigPicture = (photo) => {
   }
 };
 
-
 const onPopupEscKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
@@ -36,7 +35,7 @@ function openBigPictureOverlay () {
   bigPictureTemplate.querySelector('.social__comment-count').add('.hidden');
   bigPictureTemplate.querySelector('.comments-loader').classList.add('.hidden');
   document.querySelector('body').classList.add('.modal-open');
-  document.removeEventListener('keydown', onPopupEscKeydown);
+  document.addEventListener('keydown', onPopupEscKeydown);
 }
 
 function closeBigPictureOverlay () {

@@ -2,7 +2,7 @@ import {isEscapeKey} from './util.js';
 
 const form = document.querySelector('.img-upload__form');
 
-const uploadPole = form.querySelector('#upload-file');
+const uploadField = form.querySelector('#upload-file');
 
 const preview = form.querySelector('.img-upload__preview');
 
@@ -37,7 +37,7 @@ const pristine = new Pristine(form, {
 const re = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
 
 const uploadPicture = (picture) => {
-  uploadPole.src = picture.url;
+  uploadField.src = picture.url;
   uploadOverlay.classList.remove('hidden');
   document.querySelector('body').classList.add('modal-open');
 };
@@ -87,7 +87,6 @@ function changePhotoScale () {
   return changePhotoScale >= minScale && changePhotoScale <= maxScale;
 }
 
-
 pristine.addValidator(form.querySelector('[name="scale"]'),
   changePhotoScale(), 'Фотография не может быть меньше 25% от её размера и больше изначального');
 
@@ -110,7 +109,6 @@ function validateComments (value) {
 pristine.addValidator(form.querySelector('[name="description"]'),
   validateComments, 'не более 140 символов');
 
-
 function openUploadOverlay () {
   uploadOverlay.classList.remove('hidden');
   document.addEventListener('keydown', onPopupEscKeydown);
@@ -123,7 +121,7 @@ function closeUploadOverlay () {
   document.querySelector('body').classList.remove('.modal-open');
 }
 
-uploadPole.addEventListener('click', (evt) => {
+uploadField.addEventListener('click', (evt) => {
   evt.preventDefault();
   openUploadOverlay();
 });
@@ -135,5 +133,5 @@ form.addEventListener('submit', (evt) => {
 });
 
 cancelUpload.addEventListener('click', () => {
-  closeUploadOverlay ();
+  closeUploadOverlay();
 });
