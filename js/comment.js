@@ -1,4 +1,4 @@
-import {getrandomNumber} from './util.js';
+import {getRandomNumber} from './util.js';
 
 const MESSAGE = [
   'Всё отлично!',
@@ -33,9 +33,9 @@ const MAX_AVATAR = 6;
 
 const createComment = (id) => ({
   id: id,
-  avatar: `img/avatar-${getrandomNumber (MIN_AVATAR, MAX_AVATAR)}.svg`,
-  message: MESSAGE[getrandomNumber (0, MESSAGE.length - 1)],
-  name: NAME[getrandomNumber (0, NAME.length - 1)]
+  avatar: `img/avatar-${getRandomNumber (MIN_AVATAR, MAX_AVATAR)}.svg`,
+  message: MESSAGE[getRandomNumber (0, MESSAGE.length - 1)],
+  name: NAME[getRandomNumber (0, NAME.length - 1)]
 });
 
 export {createComment};
