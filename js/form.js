@@ -96,7 +96,8 @@ function validateHashtags (value) {
       .createElement('span')
       .textContent('Хэштег должен начинаться с #, не быть пустым, не содержать спецсимволы (#, @, $ и т. п.) и пробелы');
   }
-  return value.length >= 0 && value.length <= 5;
+  const array = value.split(/(?!$)/u);
+  return array.length >= 0 && array.length <= 5;
 }
 
 pristine.addValidator(form.querySelector('[name="hashtags"]'),
