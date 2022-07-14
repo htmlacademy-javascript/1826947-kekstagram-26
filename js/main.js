@@ -5,4 +5,3 @@ import {drawPicture} from './picture.js';
 import './form.js';
 
 drawPicture(createPhotos());
-
