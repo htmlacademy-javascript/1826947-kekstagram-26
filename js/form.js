@@ -18,7 +18,6 @@ const cancelUpload = form.querySelector('#upload-cancel');
 
 const hashtagField = form.querySelector('.text__hashtags');
 
-
 const onPopupEscKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
@@ -28,8 +27,8 @@ const onPopupEscKeydown = (evt) => {
 
 const pristine = new Pristine(form, {
   classTo: 'img-upload__form',
-  errorClass: 'img-upload--invalid',
-  successClass: 'img-upload--valid',
+  errorClass: 'error',
+  successClass: 'success',
   errorTextParent: 'img-upload__form',
   errorTextTag: 'span'
 }, false);
