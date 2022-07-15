@@ -9,10 +9,13 @@ const similarPictureTemplate = document.querySelector('#picture').content;
 const drawPicture = function createClone(photos) {
   photos.forEach((photo) => {
     const photoElement = similarPictureTemplate.cloneNode(true);
+    photoElement.addEventListener('click', (evt) => {
+      evt.preventDefault();
+      drawBigPicture(photo);
+    });
     photoElement.querySelector('.picture__img').src = photo.url;
     photoElement.querySelector('.picture__comments').textContent = photo.comments.length;
     photoElement.querySelector('.picture__likes').textContent = photo.likes;
-    photoElement.addEventListener('click', () => drawBigPicture(photo));
     userDialog.appendChild(photoElement);
   });
 };

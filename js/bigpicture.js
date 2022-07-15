@@ -29,7 +29,8 @@ const onPopupEscKeydown = (evt) => {
   }
 };
 
-function openBigPictureOverlay () {
+function openBigPictureOverlay (evt) {
+  evt.preventDefault();
   bigPictureOverlay.classList.remove('hidden');
   bigPictureOverlay.querySelector('.social__comment-count').add('.hidden');
   bigPictureOverlay.querySelector('.comments-loader').classList.add('.hidden');
