@@ -28,7 +28,6 @@ const pristine = new Pristine(form, {
   errorClass: 'error',
   successClass: 'success',
   errorTextParent: 'img-upload__form',
-  errorTextParent: 'spam',
 }, false);
 
 /*const uploadPicture = (picture) => {
