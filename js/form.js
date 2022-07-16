@@ -185,7 +185,15 @@ uploadField.addEventListener('click', (evt) => {
 
 form.addEventListener('submit', (evt) => {
   evt.preventDefault();
-  pristine.validate();
+  const isValid = pristine.validate();
+  const success = document.querySelector('#success');
+  const error = document.querySelector('#error');
+  if (isValid) {
+    success.display = 'block';
+  } else {
+    error.display = 'block';
+  }
+
   closeUploadOverlay();
   form.reset();
 });
