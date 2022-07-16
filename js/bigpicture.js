@@ -14,11 +14,31 @@ const drawBigPicture = (photo) => {
   bigPictureOverlay.querySelector('.social__caption').textContent = photo.description;
 
   const bigPhotoComments = commentsTemplate.cloneNode(true);
+  const comentsLoaderButton = bigPictureOverlay.querySelector('.social__comments-loader');
+
   for (let j = 0; j < bigPhotoComments.length; j++) {
     bigPhotoComments[j].querySelector('.social__picture').src = photo.comments[j].avatar;
     bigPhotoComments[j].querySelector('.social__picture').alt = photo.comments[j].name;
     bigPhotoComments[j].querySelector('social__text').textContent = photo.comments[j].message;
     bigPhotoComments[j].appendChild(commentsTemplate);
+
+    for (let k = 5; k < commentsTemplate.length; k++) {
+      commentsTemplate[k].style.display = 'none';
+
+      commentsTemplate.querySelector('.comments-count').textContent = commentsTemplate.length;
+    }
+
+    comentsLoaderButton.addEventListener('click', () => {
+      const step = 5;
+      if (step <= commentsTemplate.length) {
+        for(let l = 0 ; l < step; l++){
+          commentsTemplate[l].style.display = 'block';
+          commentsTemplate.querySelector('.social__comment-count')
+            .textContent = `${commentsTemplate.length} из комментариев`;
+        }
+        bigPictureOverlay.querySelector('.comments-loader').classList.add('.hidden');
+      }
+    });
   }
 };
 
@@ -30,8 +50,6 @@ const onPopupEscKeydown = (evt) => {
 };
 
 function openBigPictureOverlay () {
-  bigPictureOverlay.classList.remove('hidden');
-  bigPictureOverlay.querySelector('.social__comment-count').add('.hidden');
   bigPictureOverlay.querySelector('.comments-loader').classList.add('.hidden');
   document.querySelector('body').classList.add('.modal-open');
   document.addEventListener('keydown', onPopupEscKeydown);
@@ -39,8 +57,6 @@ function openBigPictureOverlay () {
 
 function closeBigPictureOverlay () {
   bigPictureOverlay.classList.add('hidden');
-  bigPictureOverlay.querySelector('.social__comment-count').remove('.hidden');
-  bigPictureOverlay.querySelector('.comments-loader').classList.remove('.hidden');
   document.querySelector('body').classList.remove('.modal-open');
   document.removeEventListener('keydown', onPopupEscKeydown);
 }

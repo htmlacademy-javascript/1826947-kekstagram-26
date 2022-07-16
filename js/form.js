@@ -1,6 +1,6 @@
 import {isEscapeKey} from './util.js';
 
-const form = document.querySelector('.img-upload__form');
+const form = document.querySelector('#upload-select-image');
 
 const uploadField = form.querySelector('#upload-file');
 
