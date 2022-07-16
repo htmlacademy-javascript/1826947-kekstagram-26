@@ -190,10 +190,12 @@ form.addEventListener('submit', (evt) => {
   const error = document.querySelector('#error');
   if (isValid) {
     success.display = 'block';
-  } else {
-    error.display = 'block';
+    const successCloseButton = success.querySelector('.success__button');
+    successCloseButton.addEventListener('click', (success.display = 'none'));
   }
-
+  error.display = 'block';
+  const errorCloseButton = error.querySelector('.error__button');
+  errorCloseButton.addEventListener('click', (error.display = 'none'));
   closeUploadOverlay();
   form.reset();
 });
