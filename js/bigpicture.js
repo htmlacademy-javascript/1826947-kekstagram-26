@@ -4,7 +4,7 @@ const bigPictureOverlay = document.querySelector('.big-picture');
 
 const commentsTemplate = bigPictureOverlay.querySelector('.social__comments').content;
 
-const closeBigPicture = document.querySelector('#picture-cancel');
+const bigPictureCloseButton = document.querySelector('#picture-cancel');
 
 const drawBigPicture = (photo) => {
   openBigPictureOverlay();
@@ -50,6 +50,7 @@ const onPopupEscKeydown = (evt) => {
 };
 
 function openBigPictureOverlay () {
+  bigPictureOverlay.classList.remove('hidden');
   bigPictureOverlay.querySelector('.comments-loader').classList.add('.hidden');
   document.querySelector('body').classList.add('.modal-open');
   document.addEventListener('keydown', onPopupEscKeydown);
@@ -61,7 +62,7 @@ function closeBigPictureOverlay () {
   document.removeEventListener('keydown', onPopupEscKeydown);
 }
 
-closeBigPicture.addEventListener('click', () => {
+bigPictureCloseButton.addEventListener('click', () => {
   closeBigPictureOverlay();
 });
 
