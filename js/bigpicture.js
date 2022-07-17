@@ -4,29 +4,34 @@ const bigPictureOverlay = document.querySelector('.big-picture');
 
 const commentsTemplate = bigPictureOverlay.querySelector('.social__comments').content;
 
+const commentsArray = Array.from(bigPictureOverlay.querySelector('.social__comments'));
+
+const bigPhotoComment = bigPictureOverlay.querySelector('.social__comment');
+
 const bigPictureCloseButton = document.querySelector('#picture-cancel');
 
 const drawBigPicture = (photo) => {
   openBigPictureOverlay();
   bigPictureOverlay.querySelector('.big-picture__img').src = photo.url;
   bigPictureOverlay.querySelector('.likes-count').textContent = photo.likes;
-  bigPictureOverlay.querySelector('.comments-count').textContent = photo.comments.length;
   bigPictureOverlay.querySelector('.social__caption').textContent = photo.description;
 
-  const bigPhotoComments = commentsTemplate.cloneNode(true);
+  const newBigPhotoComment = bigPhotoComment.cloneNode(true);
   const comentsLoaderButton = bigPictureOverlay.querySelector('.social__comments-loader');
 
-  for (let j = 0; j < bigPhotoComments.length; j++) {
-    bigPhotoComments[j].querySelector('.social__picture').src = photo.comments[j].avatar;
-    bigPhotoComments[j].querySelector('.social__picture').alt = photo.comments[j].name;
-    bigPhotoComments[j].querySelector('social__text').textContent = photo.comments[j].message;
-    bigPhotoComments[j].appendChild(commentsTemplate);
+  for (let j = 0; j < commentsArray.length; j++) {
+    newBigPhotoComment[j].querySelector('.social__picture').src = photo.comments[j].avatar;
+    newBigPhotoComment[j].querySelector('.social__picture').alt = photo.comments[j].name;
+    newBigPhotoComment[j].querySelector('social__text').textContent = photo.comments[j].message;
+    newBigPhotoComment[j].appendChild(commentsTemplate);
 
     for (let k = 5; k < commentsTemplate.length; k++) {
       commentsTemplate[k].style.display = 'none';
 
       commentsTemplate.querySelector('.comments-count').textContent = commentsTemplate.length;
     }
+
+    bigPictureOverlay.querySelector('.comments-count').textContent = commentsTemplate.length;
 
     comentsLoaderButton.addEventListener('click', () => {
       const step = 5;
