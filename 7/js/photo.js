@@ -1,4 +1,4 @@
-import {getrandomNumber} from './util.js';
+import {getRandomNumber} from './util.js';
 
 const DESCRIPTION = [
   'Классный был день.',
@@ -20,8 +20,8 @@ const MAX_LIKES = 200;
 const createPhoto = (id) => ({
   id: id,
   url: `photos/${id}.jpg`,
-  description: DESCRIPTION[getrandomNumber(0, DESCRIPTION.length - 1)],
-  likes: getrandomNumber(MIN_LIKES, MAX_LIKES)
+  description: DESCRIPTION[getRandomNumber(0, DESCRIPTION.length - 1)],
+  likes: getRandomNumber(MIN_LIKES, MAX_LIKES)
 });
 
 export {createPhoto};
