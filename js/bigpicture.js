@@ -46,7 +46,6 @@ const drawBigPicture = function (photo) {
     const showMoreCommentsButton = bigPictureOverlay.querySelector('.social__comments-loader');
     const commentCountField = bigPictureOverlay.querySelector('.social__comment-count');
     commentCountField.querySelector('.comments-count').textContent = allComments.length;
-    console.log(allComments);
 
     if (allComments.length >= SHOW_STEP_COMMENTS) {
       showMoreCommentsButton.classList.add('hidden');
@@ -57,7 +56,7 @@ const drawBigPicture = function (photo) {
     }
 
     const showMoreCommentsButtonLoader = function () {
-      let unshownComnnents = allComments.length - SHOW_STEP_COMMENTS;
+      const unshownComnnents = allComments.length - SHOW_STEP_COMMENTS;
       if (allComments.length >= SHOW_STEP_COMMENTS) {
         showMoreCommentsButton.classList.add('hidden');
         showMoreCommentsButton.removeEventListener('click', showMoreCommentsButtonLoader);
