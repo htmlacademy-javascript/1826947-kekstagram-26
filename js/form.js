@@ -4,7 +4,7 @@ const form = document.querySelector('#upload-select-image');
 
 const uploadField = form.querySelector('#upload-file');
 
-// const preview = form.querySelector('.img-upload__preview');
+const preview = form.querySelector('.img-upload__preview img');
 
 const uploadOverlay = form.querySelector('.img-upload__overlay');
 
@@ -13,8 +13,6 @@ const cancelUpload = form.querySelector('#upload-cancel');
 //const scalePhoto = form.querySelector('.img-upload__scale');
 
 //const photoScaleMassive = [0.25, 0.5, 0.75, 1];
-
-const hashtagField = form.querySelector('.text__hashtags');
 
 const onPopupEscKeydown = (evt) => {
   if (isEscapeKey(evt)) {
@@ -25,10 +23,9 @@ const onPopupEscKeydown = (evt) => {
 
 const pristine = new Pristine(form, {
   classTo: 'img-upload__form',
-  errorClass: 'error',
-  successClass: 'success',
-  errorTextParent: 'img-upload__form',
-}, false);
+  errorTextParent: 'img-upload__text',
+  errorTextTag: 'span'
+});
 
 /*const uploadPicture = (picture) => {
   uploadField.src = picture.url;
@@ -130,38 +127,30 @@ pristine.addValidator(form.querySelector('[name="scale"]'),
   changePhotoScale(), 'Фотография не может быть меньше 25% от её размера и больше изначального');
 */
 
-function validateHashtags () {
-  const array = hashtagField.value.toLowerCase().trim().split(' ');
-  const uniqueHashstag = new Set(array);
+function validateHashtags (hashtag) {
   const re = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
-  const MAX_HASHTAGS = 5;
-
-  array.forEach((hashtag) => {
-    if (!re.test(hashtag)) {
-      hashtagField.setCustomValidity(
-        `Хэш-тег должен начинается с символа # (решётка)
-        Хэш-тег должен состоять из букв и чисел и не может содержать пробелы, спецсимволы (#, @, $ и т. п.), символы пунктуации (тире, дефис, запятая и т. п.), эмодзи и т. д.`);
+  //hashtag.match(re) cначала создать массив и пройтись for
+  const hashtagArray = hashtag.split(' ');
+  for (let i = 0; i < hashtagArray.length; i++) {
+    if (!re.test(hashtagArray[i])) {
+      return false;
     }
-    if (array.length !== uniqueHashstag.size) {
-      hashtagField.setCustomValidity('Хэш-теги не должны повторяться');
-    }
-    hashtagField.setCustomValidity('');
-  });
-
-  hashtagField.reportValidity();
-  return array.length <= MAX_HASHTAGS;
+  }
+  return hashtagArray.length <= 5;
 }
 
-pristine.addValidator(form.querySelector('[name="hashtags"]'),
+pristine.addValidator(
+  form.querySelector('.text__hashtags'),
   validateHashtags,
-  'не более 5 хэштегов'
+  'Хэштегов не должно быть больше 5, каждый из них должен начинаться с #, не быть пустым, не содержать более 20 символов, не содержать спецсимволы (@, $, % и т. п.), не содержать символы пунктуации и пробелы'
 );
 
 function validateComments (value) {
   return value.length <= 140;
 }
 
-pristine.addValidator(form.querySelector('[name="description"]'),
+pristine.addValidator(
+  form.querySelector('.text__description'),
   validateComments,
   'не более 140 символов'
 );
@@ -178,25 +167,35 @@ function closeUploadOverlay () {
   document.querySelector('body').classList.remove('.modal-open');
 }
 
-uploadField.addEventListener('click', (evt) => {
+
+uploadField.addEventListener('change', (evt) => {
   evt.preventDefault();
+  preview.src = URL.createObjectURL(event.target.files[0]);
   openUploadOverlay();
 });
 
+
 form.addEventListener('submit', (evt) => {
   evt.preventDefault();
-  const isValid = pristine.validate();
-  const success = document.querySelector('#success');
+  pristine.validate();
+  /*const success = document.querySelector('#success');
   const error = document.querySelector('#error');
   if (isValid) {
-    success.display = 'block';
+    success.style.display = 'block';
     const successCloseButton = success.querySelector('.success__button');
-    successCloseButton.addEventListener('click', (success.display = 'none'));
+    if(successCloseButton) {
+      successCloseButton.addEventListener('click', () => {
+        success.style.display = 'none';
+      });
+    }
   }
-  error.display = 'block';
+  error.style.display = 'block';
   const errorCloseButton = error.querySelector('.error__button');
-  errorCloseButton.addEventListener('click', (error.display = 'none'));
-  closeUploadOverlay();
+  if(errorCloseButton) {
+    errorCloseButton.addEventListener('click', () => {
+      error.style.display = 'none';
+    });
+  }*/
   form.reset();
 });
 
