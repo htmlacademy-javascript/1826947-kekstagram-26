@@ -135,14 +135,22 @@ function validateHashtags (hashtag) {
     if (!re.test(hashtagArray[i])) {
       return false;
     }
+    const lowerCasehashtagArray = [];
+    hashtagArray.forEach((hashtagElement) => {
+      lowerCasehashtagArray.push(hashtagElement.toLowerCase());
+    });
+    if (lowerCasehashtagArray[i + 1] === lowerCasehashtagArray[i]) {
+      return false;
+    }
+    return hashtagArray.length <= 5;
   }
-  return hashtagArray.length <= 5;
 }
+
 
 pristine.addValidator(
   form.querySelector('.text__hashtags'),
   validateHashtags,
-  'Хэштегов не должно быть больше 5, каждый из них должен начинаться с #, не быть пустым, не содержать более 20 символов, не содержать спецсимволы (@, $, % и т. п.), не содержать символы пунктуации и пробелы'
+  'Хэштегов не должно быть больше 5. Каждый из них должен начинаться с #, не быть пустым, не содержать более 20 символов, не содержать спецсимволы (@, $, % и т. п.), не содержать символы пунктуации и пробелы. Не может быть 2-х одинаковы хэштега.'
 );
 
 function validateComments (value) {
