@@ -9,7 +9,7 @@ const createPhotos = () => {
     const post = createPhoto(i + 1);
     const comments = [];
 
-    for (let j = 0; j < 3; j++) {
+    for (let j = 0; j < 4; j++) {
       const comment = createComment(j + 1);
       comments.push(comment);
     }

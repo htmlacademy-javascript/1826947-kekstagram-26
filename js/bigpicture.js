@@ -1,10 +1,16 @@
 import {isEscapeKey} from './util.js';
 
 const bigPictureOverlay = document.querySelector('.big-picture');
-
 const bigPictureCloseButton = bigPictureOverlay.querySelector('#picture-cancel');
+const commentsArray = bigPictureOverlay.querySelector('.social__comments');
+const showMoreCommentsButton = bigPictureOverlay.querySelector('.social__comments-loader');
 
-const comentsArray = bigPictureOverlay.querySelector('.social__comments');
+const onPopupEscKeydown = (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    closeBigPictureOverlay();
+  }
+};
 
 const createComment = function (comment) {
   const commentElement = document.createElement('li');
@@ -23,10 +29,10 @@ const createComment = function (comment) {
   return commentElement;
 };
 
-const hideCommentsPattern = function () {
-  const commentsPattern = comentsArray.querySelectorAll('.social__comment');
+const removeCommentsPattern = function () {
+  const commentsPattern = commentsArray.querySelectorAll('.social__comment');
   for (let i = 0; i < commentsPattern.length; i++) {
-    commentsPattern[i].classList.add('hidden');
+    commentsPattern[i].remove();
   }
 };
 
@@ -35,48 +41,63 @@ const drawBigPicture = function (photo) {
   bigPictureOverlay.querySelector('.big-picture__img img').src = photo.url;
   bigPictureOverlay.querySelector('.likes-count').textContent = photo.likes;
   bigPictureOverlay.querySelector('.social__caption').textContent = photo.description;
-  hideCommentsPattern();
+  removeCommentsPattern();
 
-  for (let j = 0; j < photo.comments.length; j++) {
-    const newComment = createComment(photo.comments[j]);
-    newComment.classList.add('visually-hidden');
-    comentsArray.appendChild(newComment);
+  const createComments = function () {
+    for (let j = 0; j < photo.comments.length; j++) {
+      const newComment = createComment(photo.comments[j]);
+      commentsArray.appendChild(newComment);
+    }
+
     const SHOW_STEP_COMMENTS = 5;
-    const allComments = comentsArray.querySelectorAll('.social__comment');
-    const showMoreCommentsButton = bigPictureOverlay.querySelector('.social__comments-loader');
+    const allComments = commentsArray.querySelectorAll('.social__comment');
     const commentCountField = bigPictureOverlay.querySelector('.social__comment-count');
-    commentCountField.querySelector('.comments-count').textContent = allComments.length;
 
-    if (allComments.length >= SHOW_STEP_COMMENTS) {
-      showMoreCommentsButton.classList.add('hidden');
-      commentCountField.textContent = `${allComments.length} комментариев`;
+    if (showMoreCommentsButton.classList.contains('hidden')) {
+      showMoreCommentsButton.classList.remove('hidden');
+    }
+
+    for (let i = 0; i < allComments.length; i++) {
+      allComments[i].classList.add('hidden');
+    }
+
+    if (allComments.length <= SHOW_STEP_COMMENTS) {
       for (let k = 0; k < allComments.length; k++) {
-        allComments[k].classList.remove('visually-hidden');
+        allComments[k].classList.remove('hidden');
       }
+      showMoreCommentsButton.classList.add('hidden');
+      commentCountField.textContent = `${allComments.length} из ${allComments.length} комментариев`;
+    }
+
+    if (allComments.length > SHOW_STEP_COMMENTS) {
+      for (let l = 0; l < SHOW_STEP_COMMENTS; l++) {
+        allComments[l].classList.remove('hidden');
+      }
+      commentCountField.textContent = `SHOW_STEP_COMMENTS из ${allComments.length} комментариев`;
     }
 
     const showMoreCommentsButtonLoader = function () {
-      const unshownComnnents = allComments.length - SHOW_STEP_COMMENTS;
-      if (allComments.length >= SHOW_STEP_COMMENTS) {
-        showMoreCommentsButton.classList.add('hidden');
-        showMoreCommentsButton.removeEventListener('click', showMoreCommentsButtonLoader);
-      }
-      if (unshownComnnents > SHOW_STEP_COMMENTS) {
-        for (let l = 0; l < SHOW_STEP_COMMENTS; l++) {
-          allComments[l].classList.remove('visually-hidden');
+      const allShownComments = commentsArray.querySelectorAll('li:not(.hidden)');
+      let willShowComments = allShownComments.length + SHOW_STEP_COMMENTS;
+
+      if (allComments.length <= willShowComments) {
+        for (let l = 0; l < allComments.length; l++) {
+          willShowComments = allComments.length;
+          allComments[l].classList.remove('hidden');
+          showMoreCommentsButton.classList.add('hidden');
         }
-        commentCountField.textContent = `${showMoreCommentsButtonLoader} из комментариев`;
       }
+
+      if (allComments.length > willShowComments) {
+        for (let k = allShownComments.length; k < willShowComments; k++) {
+          allComments[k].classList.remove('hidden');
+        }
+      }
+      commentCountField.textContent = `${willShowComments} из ${allComments.length} комментариев`;
     };
     showMoreCommentsButton.addEventListener('click', showMoreCommentsButtonLoader);
-  }
-};
-
-const onPopupEscKeydown = (evt) => {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    closeBigPictureOverlay();
-  }
+  };
+  createComments();
 };
 
 function openBigPictureOverlay () {
