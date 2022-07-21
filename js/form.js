@@ -4,15 +4,20 @@ const form = document.querySelector('#upload-select-image');
 
 const uploadField = form.querySelector('#upload-file');
 
-const preview = form.querySelector('.img-upload__preview img');
+const photoPreview = form.querySelector('.img-upload__preview img');
 
 const uploadOverlay = form.querySelector('.img-upload__overlay');
 
 const cancelUpload = form.querySelector('#upload-cancel');
 
-//const scalePhoto = form.querySelector('.img-upload__scale');
+const scaleControl = form.querySelector('.img-upload__scale');
 
-//const photoScaleMassive = [0.25, 0.5, 0.75, 1];
+const scalePhotoValue = scaleControl.querySelector('.scale__control--value');
+scalePhotoValue.value = `${100}%`;
+
+const smallerScaleButton = scaleControl.querySelector('.scale__control--smaller');
+
+const biggerScaleButton = scaleControl.querySelector('.scale__control--bigger');
 
 const onPopupEscKeydown = (evt) => {
   if (isEscapeKey(evt)) {
@@ -37,7 +42,7 @@ pristine.addValidator(form.querySelector('[name="filename"]'),
   uploadPicture, 'Загрузите фотографию');
 
 function onEffectChoose (value) {
-  return preview.classList.add(`.effects__preview--${value}`);
+  return photoPreview.classList.add(`.effects__preview--${value}`);
 }
 
 const chosenEffect = form.querySelector('[name="effect"]:checked');
@@ -105,27 +110,46 @@ chosenEffect.addEventListener('change', (evt) => {
   }
   depthEffect.noUiSlider.set(1);
 });
-
-
-function changePhotoScale () {
-  const maxScale = photoScaleMassive.length - 1;
-  const minScale = photoScaleMassive[0];
-  scalePhoto.querySelector('.scale__control--smaller')
-    .addEventListener('click', () => {
-      photoScaleMassive.length --;
-    });
-
-  scalePhoto.querySelector('.scale__control--bigger')
-    .addEventListener('click', () => {
-      photoScaleMassive.length ++;
-    });
-
-  return changePhotoScale >= minScale && changePhotoScale <= maxScale;
-}
-
-pristine.addValidator(form.querySelector('[name="scale"]'),
-  changePhotoScale(), 'Фотография не может быть меньше 25% от её размера и больше изначального');
 */
+
+const getScaleValue = function (value) {
+  return parseInt(value, 10);
+};
+
+scaleControl.addEventListener('click', (evt) => {
+  if (evt.target === smallerScaleButton) {
+    if(getScaleValue(scalePhotoValue.value) <= 50 && getScaleValue(scalePhotoValue.value) > 25) {
+      scalePhotoValue.value = `${25}%`;
+      photoPreview.style.transform = 'scale(0.25)';
+    }
+    if(getScaleValue(scalePhotoValue.value) <= 75 && getScaleValue(scalePhotoValue.value) > 50) {
+      scalePhotoValue.value = `${50}%`;
+      photoPreview.style.transform = 'scale(0.5)';
+    }
+    if(getScaleValue(scalePhotoValue.value) <= 100 && getScaleValue(scalePhotoValue.value) > 75) {
+      scalePhotoValue.value = `${75}%`;
+      photoPreview.style.transform = 'scale(0.75)';
+    }
+  }
+  if (evt.target === biggerScaleButton) {
+    if(getScaleValue(scalePhotoValue.value) >= 75 && getScaleValue(scalePhotoValue.value) < 100) {
+      scalePhotoValue.value = `${100}%`;
+      photoPreview.style.transform = 'scale(1)';
+    }
+    if(getScaleValue(scalePhotoValue.value) >= 50 && getScaleValue(scalePhotoValue.value) < 75) {
+      scalePhotoValue.value = `${75}%`;
+      photoPreview.style.transform = 'scale(0.75)';
+    }
+    if(getScaleValue(scalePhotoValue.value) >= 25 && getScaleValue(scalePhotoValue.value) < 50) {
+      scalePhotoValue.value = `${50}%`;
+      photoPreview.style.transform = 'scale(0.5)';
+    }
+    if(getScaleValue(scalePhotoValue.value) >= 0 && getScaleValue(scalePhotoValue.value) < 25) {
+      scalePhotoValue.value = `${25}%`;
+      photoPreview.style.transform = 'scale(0.25)';
+    }
+  }
+});
 
 function validateHashtags (hashtag) {
   const re = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
@@ -178,7 +202,7 @@ function closeUploadOverlay () {
 
 uploadField.addEventListener('change', (evt) => {
   evt.preventDefault();
-  preview.src = URL.createObjectURL(event.target.files[0]);
+  photoPreview.src = URL.createObjectURL(event.target.files[0]);
   openUploadOverlay();
 });
 
