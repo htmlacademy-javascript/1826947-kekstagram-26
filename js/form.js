@@ -11,12 +11,9 @@ const uploadOverlay = form.querySelector('.img-upload__overlay');
 const cancelUpload = form.querySelector('#upload-cancel');
 
 const scaleControl = form.querySelector('.img-upload__scale');
-
 const scalePhotoValue = scaleControl.querySelector('.scale__control--value');
 scalePhotoValue.value = `${100}%`;
-
 const smallerScaleButton = scaleControl.querySelector('.scale__control--smaller');
-
 const biggerScaleButton = scaleControl.querySelector('.scale__control--bigger');
 
 const onPopupEscKeydown = (evt) => {
@@ -31,86 +28,6 @@ const pristine = new Pristine(form, {
   errorTextParent: 'img-upload__text',
   errorTextTag: 'span'
 });
-
-/*const uploadPicture = (picture) => {
-  uploadField.src = picture.url;
-  uploadOverlay.classList.remove('hidden');
-  document.querySelector('body').classList.add('modal-open');
-};
-
-pristine.addValidator(form.querySelector('[name="filename"]'),
-  uploadPicture, 'Загрузите фотографию');
-
-function onEffectChoose (value) {
-  return photoPreview.classList.add(`.effects__preview--${value}`);
-}
-
-const chosenEffect = form.querySelector('[name="effect"]:checked');
-
-pristine.addValidator(chosenEffect,
-  onEffectChoose, 'Выберите один из эффектов');
-
-const depthEffect = form.querySelector('.effect-level__value');
-
-noUiSlider.create(depthEffect, {
-  range: {
-    min: 0,
-    max: 1,
-  },
-  start: 1,
-  step: 0.1,
-  connect: 'lower',
-  format: {
-    to: function (value) {
-      if (Number.isInteger(value)) {
-        return value.toFixed(0);
-      }
-      return valuetoFixed(1);
-    },
-    from: functuon(value) {
-      return parseFloat(value);
-    },
-  },
-});
-
-depthEffect.noUiSlider.on('update', (...rest) => {
-chosenEffect.style.opacity =  depthEffect.noUiSlider.get();
-});
-
-chosenEffect.addEventListener('change', (evt) => {
-    if (evt.target.value === 'marvin') {
-    depthEffect.noUiSlider.updateOptions ({
-      range: {
-        min = 0,
-        max = 100,
-      },
-      step: 1,
-    });
-  }
-  if (evt.target.value === 'phobos') {
-    depthEffect.noUiSlider.updateOptions ({
-      range: {
-        min = 0,
-        max = 3,
-      },
-      step: 0.1,
-    });
-  }
-  if (evt.target.value === 'heat') {
-    depthEffect.noUiSlider.updateOptions ({
-      range: {
-        min = 1
-        max = 3,
-      },
-      step: 0.1,
-    });
-  }
-  if (evt.target.value === 'none') {
-    depthEffect.setAttribute('disabled', true);
-  }
-  depthEffect.noUiSlider.set(1);
-});
-*/
 
 const getScaleValue = function (value) {
   return parseInt(value, 10);
@@ -151,9 +68,104 @@ scaleControl.addEventListener('click', (evt) => {
   }
 });
 
+const depthEffectSlider = form.querySelector('.effect-level__slider');
+const depthEffectValue = document.querySelector('.effect-level__value');
+depthEffectValue.value = 1;
+
+noUiSlider.create(depthEffectSlider, {
+  range: {
+    min: 0,
+    max: 1,
+  },
+  start: 1,
+  step: 0.1,
+  connect: 'lower',
+  format: {
+    to: function (value) {
+      if (Number.isInteger(value)) {
+        return value.toFixed(0);
+      }
+      return value.toFixed(1);
+    },
+    from: function (value) {
+      return parseFloat(value);
+    },
+  },
+});
+
+depthEffectSlider.noUiSlider.on('update', () => {
+  depthEffectValue.value = depthEffectSlider.noUiSlider.get();
+});
+const noneEffect = form.querySelector('#effect-none');
+const chromeEffect = form.querySelector('#effect-chrome');
+const sepiaEffect = form.querySelector('#effect-sepia');
+const marvinEffect = form.querySelector('#effect-marvin');
+const phobosEffect = form.querySelector('#effect-phobos');
+const heatEffect = form.querySelector('#effect-heat');
+
+noneEffect.addEventListener('click', () => {
+  photoPreview.className = "";
+  photoPreview.style.filter = 0;
+  photoPreview.setAttribute('disabled', true);
+});
+chromeEffect.addEventListener('click', () => {
+  photoPreview.className = "";
+  photoPreview.style.filter = 0;
+  depthEffectSlider.noUiSlider.set(1);
+  photoPreview.classList.add(`effects__preview--${chromeEffect.value}`);
+  photoPreview.style.filter = `grayscale${depthEffectValue.value}`;
+});
+sepiaEffect.addEventListener('click', () => {
+  photoPreview.className = "";
+  photoPreview.style.filter = 0;
+  depthEffectSlider.noUiSlider.set(1);
+  photoPreview.classList.add(`effects__preview--${sepiaEffect.value}`);
+  photoPreview.style.filter = `sepia${depthEffectValue.value}`;
+});
+marvinEffect.addEventListener('click', () => {
+  photoPreview.className = "";
+  photoPreview.style.filter = 0;
+  console.log(marvinEffect.value);
+  depthEffectSlider.noUiSlider.set(100);
+  depthEffectSlider.noUiSlider.updateOptions({
+    range: {
+      min: 0,
+      max: 100,
+    },
+    step: 1,
+  });
+  photoPreview.classList.add(`effects__preview--${marvinEffect.value}`);
+  photoPreview.style.filter = `invert${depthEffectValue.value}`;
+});
+phobosEffect.addEventListener('click', () => {
+  photoPreview.className = "";
+  photoPreview.style.filter = 0;
+  depthEffectSlider.noUiSlider.set(3);
+  depthEffectSlider.noUiSlider.updateOptions({
+    range: {
+      min: 0,
+      max: 3,
+    },
+  });
+  photoPreview.classList.add(`effects__preview--${phobosEffect.value}`);
+  photoPreview.style.filter = `blur${depthEffectValue.value}`;
+});
+heatEffect.addEventListener('click', () => {
+  photoPreview.className = "";
+  photoPreview.style.filter = 0;
+  depthEffectSlider.noUiSlider.set(3);
+  depthEffectSlider.noUiSlider.updateOptions({
+    range: {
+      min: 1,
+      max: 3,
+    },
+  });
+  photoPreview.classList.add(`effects__preview--${heatEffect.value}`);
+  photoPreview.style.filter = `brightness${depthEffectValue.value}`;
+});
+
 function validateHashtags (hashtag) {
   const re = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
-  //hashtag.match(re) cначала создать массив и пройтись for
   const hashtagArray = hashtag.split(' ');
   for (let i = 0; i < hashtagArray.length; i++) {
     if (!re.test(hashtagArray[i])) {
