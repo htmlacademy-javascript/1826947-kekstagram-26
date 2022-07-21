@@ -73,7 +73,7 @@ const drawBigPicture = function (photo) {
       for (let l = 0; l < SHOW_STEP_COMMENTS; l++) {
         allComments[l].classList.remove('hidden');
       }
-      commentCountField.textContent = `SHOW_STEP_COMMENTS из ${allComments.length} комментариев`;
+      commentCountField.textContent = `${SHOW_STEP_COMMENTS} из ${allComments.length} комментариев`;
     }
 
     const showMoreCommentsButtonLoader = function () {
