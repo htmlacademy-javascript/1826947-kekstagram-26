@@ -100,10 +100,30 @@ const sepiaEffect = form.querySelector('#effect-sepia');
 const marvinEffect = form.querySelector('#effect-marvin');
 const phobosEffect = form.querySelector('#effect-phobos');
 const heatEffect = form.querySelector('#effect-heat');
-const photoPreviewStyle = getComputedStyle(photoPreview);
 
 depthEffectSlider.noUiSlider.on('update', () => {
   depthEffectValue.value = (depthEffectSlider.noUiSlider.get());
+  const currentEffect = form.querySelector('[name="effect"]:checked').value;
+  switch(currentEffect) {
+    case 'chrome':
+      photoPreview.style.filter = `grayscale(${depthEffectValue.value})`;
+      break;
+    case 'sepia':
+      photoPreview.style.filter = `sepia(${depthEffectValue.value})`;
+      break;
+    case 'marvin':
+      photoPreview.style.filter = `invert(${depthEffectValue.value}%)`;
+      break;
+    case 'phobos':
+      photoPreview.style.filter = `blur(${depthEffectValue.value}px)`;
+      break;
+    case 'heat':
+      photoPreview.style.filter = `brightness(${depthEffectValue.value})`;
+      break;
+    default:
+      photoPreview.style.filter = 'none';
+      break;
+  }
 });
 
 const showSliderField = function () {
@@ -113,14 +133,11 @@ const showSliderField = function () {
 };
 
 noneEffect.addEventListener('click', () => {
-  //effectName = '';
   photoPreview.className = '';
-  //photoPreview.style.filter = '';
   slidetField.classList.add('hidden');
 });
 
 chromeEffect.addEventListener('change', () => {
-  //effectName = 'grayscale';
   photoPreview.className = '';
   showSliderField();
   depthEffectSlider.noUiSlider.updateOptions({
@@ -135,7 +152,6 @@ chromeEffect.addEventListener('change', () => {
 });
 
 sepiaEffect.addEventListener('change', () => {
-  //effectName = 'sepia';
   photoPreview.className = '';
   showSliderField();
   depthEffectSlider.noUiSlider.updateOptions({
@@ -150,7 +166,6 @@ sepiaEffect.addEventListener('change', () => {
 });
 
 marvinEffect.addEventListener('change', () => {
-  //effectName = 'invert';
   showSliderField();
   photoPreview.className = '';
   depthEffectSlider.noUiSlider.updateOptions({
@@ -165,7 +180,6 @@ marvinEffect.addEventListener('change', () => {
 });
 
 phobosEffect.addEventListener('change', () => {
-  //effectName = 'blur';
   showSliderField();
   photoPreview.className = '';
   depthEffectSlider.noUiSlider.updateOptions({
@@ -179,7 +193,6 @@ phobosEffect.addEventListener('change', () => {
 });
 
 heatEffect.addEventListener('change', () => {
-  //effectName = 'brightness';
   showSliderField();
   photoPreview.className = '';
   depthEffectSlider.noUiSlider.updateOptions({
