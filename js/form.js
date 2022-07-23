@@ -29,42 +29,24 @@ const pristine = new Pristine(form, {
   errorTextTag: 'span'
 });
 
-const getScaleValue = function (value) {
-  return parseInt(value, 10);
-};
+const MIN_SCALE = 25;
+const MAX_SCALE = 100;
+const STEP = 25;
 
 scaleControl.addEventListener('click', (evt) => {
   if (evt.target === smallerScaleButton) {
-    if(getScaleValue(scalePhotoValue.value) <= 50 && getScaleValue(scalePhotoValue.value) > 25) {
-      scalePhotoValue.value = `${25}%`;
-      photoPreview.style.transform = 'scale(0.25)';
+    if (parseInt(scalePhotoValue.value, 10) > MIN_SCALE) {
+      scalePhotoValue.value = `${parseInt(scalePhotoValue.value, 10) - STEP}%`;
+      photoPreview.style.transform = `scale(${parseInt(scalePhotoValue.value, 10) / 100})`;
     }
-    if(getScaleValue(scalePhotoValue.value) <= 75 && getScaleValue(scalePhotoValue.value) > 50) {
-      scalePhotoValue.value = `${50}%`;
-      photoPreview.style.transform = 'scale(0.5)';
-    }
-    if(getScaleValue(scalePhotoValue.value) <= 100 && getScaleValue(scalePhotoValue.value) > 75) {
-      scalePhotoValue.value = `${75}%`;
-      photoPreview.style.transform = 'scale(0.75)';
-    }
+    return scalePhotoValue.value;
   }
   if (evt.target === biggerScaleButton) {
-    if(getScaleValue(scalePhotoValue.value) >= 75 && getScaleValue(scalePhotoValue.value) < 100) {
-      scalePhotoValue.value = `${100}%`;
-      photoPreview.style.transform = 'scale(1)';
+    if (parseInt(scalePhotoValue.value, 10) < MAX_SCALE) {
+      scalePhotoValue.value = `${parseInt(scalePhotoValue.value, 10) + STEP}%`;
+      photoPreview.style.transform = `scale(${parseInt(scalePhotoValue.value, 10) / 100})`;
     }
-    if(getScaleValue(scalePhotoValue.value) >= 50 && getScaleValue(scalePhotoValue.value) < 75) {
-      scalePhotoValue.value = `${75}%`;
-      photoPreview.style.transform = 'scale(0.75)';
-    }
-    if(getScaleValue(scalePhotoValue.value) >= 25 && getScaleValue(scalePhotoValue.value) < 50) {
-      scalePhotoValue.value = `${50}%`;
-      photoPreview.style.transform = 'scale(0.5)';
-    }
-    if(getScaleValue(scalePhotoValue.value) >= 0 && getScaleValue(scalePhotoValue.value) < 25) {
-      scalePhotoValue.value = `${25}%`;
-      photoPreview.style.transform = 'scale(0.25)';
-    }
+    return scalePhotoValue.value;
   }
 });
 
