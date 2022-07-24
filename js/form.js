@@ -1,6 +1,9 @@
 import {isEscapeKey} from './util.js';
 
+//import {showMessage} from './util.js';
+
 const form = document.querySelector('#upload-select-image');
+//const submitFormButton = form.querySelector('#upload-submit');
 
 const uploadField = form.querySelector('#upload-file');
 
@@ -12,7 +15,6 @@ const cancelUpload = form.querySelector('#upload-cancel');
 
 const scaleControl = form.querySelector('.img-upload__scale');
 const scalePhotoValue = scaleControl.querySelector('.scale__control--value');
-scalePhotoValue.value = `${100}%`;
 const smallerScaleButton = scaleControl.querySelector('.scale__control--smaller');
 const biggerScaleButton = scaleControl.querySelector('.scale__control--bigger');
 
@@ -232,8 +234,12 @@ function closeUploadOverlay () {
   uploadOverlay.classList.add('hidden');
   document.removeEventListener('keydown', onPopupEscKeydown);
   document.querySelector('body').classList.remove('.modal-open');
+  scalePhotoValue.value = '100%';
+  form.querySelector('#effect-none').checked = true;
+  form.querySelector('.text__hashtags').textContent = '';
+  form.querySelector('.text__description').textContent = '';
+  photoPreview.style.transform = 'scale(1)';
 }
-
 
 uploadField.addEventListener('change', (evt) => {
   evt.preventDefault();
@@ -241,31 +247,43 @@ uploadField.addEventListener('change', (evt) => {
   openUploadOverlay();
 });
 
+const blockSubmitButton = () => {
+  submitFormButton.disabled = true;
+  submitFormButton.textContent = 'Публикуем...';
+}
 
-form.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  pristine.validate();
-  /*const success = document.querySelector('#success');
-  const error = document.querySelector('#error');
-  if (isValid) {
-    success.style.display = 'block';
-    const successCloseButton = success.querySelector('.success__button');
-    if(successCloseButton) {
-      successCloseButton.addEventListener('click', () => {
-        success.style.display = 'none';
-      });
-    }
-  }
-  error.style.display = 'block';
-  const errorCloseButton = error.querySelector('.error__button');
-  if(errorCloseButton) {
-    errorCloseButton.addEventListener('click', () => {
-      error.style.display = 'none';
-    });
-  }*/
-  form.reset();
-});
+
+const unblockSubmitButton = () => {
+  submitFormButton.disabled = false;
+  submitFormButton.textContent = 'Опубликовать';
+}
+
+// const setFormSubmit = (onSuccess) => {
+  form.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    pristine.validate();
+    closeUploadOverlay();
+    /*
+    const valid =  pristine.validate();
+    if (isValid) {
+      blockSubmitButton();
+      sendData(
+        () => {
+          showMessage(success);
+          unblockSubmitButton();
+        },
+        () => {
+          showMessage(error);
+          unblockSubmitButton();
+        },
+        new FormData(evt.target));
+    }*/
+  });
+//}
 
 cancelUpload.addEventListener('click', () => {
   closeUploadOverlay();
 });
+
+
+//export {setFormSubmit};
