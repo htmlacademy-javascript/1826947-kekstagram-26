@@ -2,6 +2,8 @@ import {isEscapeKey} from './util.js';
 
 //import {showMessage} from './util.js';
 
+//import {sendData} from './fetch.js';
+
 const form = document.querySelector('#upload-select-image');
 //const submitFormButton = form.querySelector('#upload-submit');
 
@@ -246,31 +248,44 @@ uploadField.addEventListener('change', (evt) => {
   photoPreview.src = URL.createObjectURL(event.target.files[0]);
   openUploadOverlay();
 });
+/*
+const createLoadingMessage = function () {
+  const loadingMessageTemplate = document.querySelector('#messages').content;
+  const loadingMessageElement = loadingMessageTemplate.cloneNode(true);
+  form.appendChild(loadingMessageElement);
+};
+createLoadingMessage();
+form.querySelector('.img-upload__message').style.display = 'none';
+
 
 const blockSubmitButton = () => {
   submitFormButton.disabled = true;
-  submitFormButton.textContent = 'Публикуем...';
-}
+  submitFormButton.style.display = 'none';
+  form.querySelector('.img-upload__message').style.display = 'block';
+};
 
 
 const unblockSubmitButton = () => {
+  form.querySelector('.img-upload__message').style.display = 'none';
+  submitFormButton.style.display = 'block';
   submitFormButton.disabled = false;
-  submitFormButton.textContent = 'Опубликовать';
-}
+};*/
 
-// const setFormSubmit = (onSuccess) => {
+const setFormSubmit = () => {
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
+    //const success = 'success';
+    //const error = 'error';
     pristine.validate();
     closeUploadOverlay();
-    /*
-    const valid =  pristine.validate();
+    /*const isValid =  pristine.validate();
     if (isValid) {
       blockSubmitButton();
       sendData(
         () => {
           showMessage(success);
           unblockSubmitButton();
+          closeUploadOverlay();
         },
         () => {
           showMessage(error);
@@ -279,11 +294,10 @@ const unblockSubmitButton = () => {
         new FormData(evt.target));
     }*/
   });
-//}
+};
 
 cancelUpload.addEventListener('click', () => {
   closeUploadOverlay();
 });
 
-
-//export {setFormSubmit};
+export {setFormSubmit};
