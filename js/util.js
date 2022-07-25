@@ -11,4 +11,15 @@ function getRandomNumber (minNumber, maxNumber) {
 
 const isEscapeKey = ((evt) => evt.key === 'Escape');
 
-export {getRandomNumber, isEscapeKey};
+const showMessage = (result) => {
+  const messageTemplate = document.querySelector(`#${result}`);
+  const messageElement = messageTemplate.cloneNode(true);
+  messageElement.style.display = 'block';
+  const messageCloseButton = messageElement.querySelector(`.${result}__button`);
+  messageCloseButton.addEventListener('click', () => {
+    messageElement.style.display = 'none';
+  });
+  document.querySelector('body').appendChild(messageElement);
+};
+
+export {getRandomNumber, isEscapeKey, showMessage};

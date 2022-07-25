@@ -1,7 +1,9 @@
-import {createPhotos} from './photos.js';
-
 import {drawPicture} from './picture.js';
 
-import './form.js';
+import {setFormSubmit} from './form.js';
 
-drawPicture(createPhotos());
+import {getData} from './fetch.js';
+
+getData(drawPicture);
+
+setFormSubmit();

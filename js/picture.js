@@ -2,8 +2,6 @@ import {drawBigPicture} from './bigpicture.js';
 
 const userDialog = document.querySelector('.pictures');
 
-userDialog.querySelector('.pictures__title').classList.remove('visually-hidden');
-
 const similarPictureTemplate = document.querySelector('#picture').content;
 
 
@@ -17,6 +15,7 @@ const drawPicture = function createClone(photos) {
       drawBigPicture(photo);
     });
     userDialog.appendChild(photoElement);
+    userDialog.querySelector('.pictures__title').classList.remove('visually-hidden');
   });
 };
 
