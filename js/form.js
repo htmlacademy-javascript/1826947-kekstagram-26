@@ -282,9 +282,9 @@ const blockSubmitButton = () => {
 
 
 const unblockSubmitButton = () => {
-  form.querySelector('.img-upload__message').style.display = 'none';
-  submitFormButton.style.display = 'block';
   submitFormButton.disabled = false;
+  submitFormButton.style.display = 'block';
+  form.querySelector('.img-upload__message').remove();
 };
 
 const setFormSubmit = () => {

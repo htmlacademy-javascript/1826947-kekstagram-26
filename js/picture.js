@@ -30,9 +30,9 @@ function deleteData (allData) {
   });
 }
 
-function checkPictureAvailability (Element) {
+function checkPictureAvailability (element) {
   if (document.querySelector('.picture')) {
-    deleteData(Element);
+    deleteData(element);
   }
 }
 
