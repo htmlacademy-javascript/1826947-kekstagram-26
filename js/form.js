@@ -247,7 +247,6 @@ function closeUploadOverlay () {
   uploadOverlay.classList.add('hidden');
   document.removeEventListener('keydown', onPopupEscKeydown);
   document.querySelector('body').classList.remove('.modal-open');
-
 }
 
 function clearForm () {
