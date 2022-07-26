@@ -1,15 +1,14 @@
-import {isEscapeKey} from './util.js';
+import {isEscapeKey,showMessage} from './util.js';
 
-//import {showMessage} from './util.js';
-
-//import {sendData} from './fetch.js';
+import {sendData} from './fetch.js';
 
 const form = document.querySelector('#upload-select-image');
-//const submitFormButton = form.querySelector('#upload-submit');
+const submitFormButton = form.querySelector('#upload-submit');
 
 const uploadField = form.querySelector('#upload-file');
 
 const photoPreview = form.querySelector('.img-upload__preview img');
+
 
 const uploadOverlay = form.querySelector('.img-upload__overlay');
 
@@ -19,6 +18,9 @@ const scaleControl = form.querySelector('.img-upload__scale');
 const scalePhotoValue = scaleControl.querySelector('.scale__control--value');
 const smallerScaleButton = scaleControl.querySelector('.scale__control--smaller');
 const biggerScaleButton = scaleControl.querySelector('.scale__control--bigger');
+
+scalePhotoValue.value = '100%';
+photoPreview.style.transform = 'scale(1)';
 
 const onPopupEscKeydown = (evt) => {
   if (isEscapeKey(evt)) {
@@ -191,7 +193,12 @@ heatEffect.addEventListener('change', () => {
   photoPreview.classList.add(`effects__preview--${heatEffect.value}`);
 });
 
+const hashtagsField = form.querySelector('.text__hashtags');
+
 function validateHashtags (hashtag) {
+  if (hashtagsField.textContent === '') {
+    return true;
+  }
   const re = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
   const hashtagArray = hashtag.split(' ');
   for (let i = 0; i < hashtagArray.length; i++) {
@@ -209,14 +216,18 @@ function validateHashtags (hashtag) {
   }
 }
 
-
 pristine.addValidator(
   form.querySelector('.text__hashtags'),
   validateHashtags,
   'Хэштегов не должно быть больше 5. Каждый из них должен начинаться с #, не быть пустым, не содержать более 20 символов, не содержать спецсимволы (@, $, % и т. п.), не содержать символы пунктуации и пробелы. Не может быть 2-х одинаковы хэштега.'
 );
 
+const descriptionsField = form.querySelector('.text__description');
+
 function validateComments (value) {
+  if (descriptionsField.textContent === '') {
+    return true;
+  }
   return value.length <= 140;
 }
 
@@ -236,8 +247,12 @@ function closeUploadOverlay () {
   uploadOverlay.classList.add('hidden');
   document.removeEventListener('keydown', onPopupEscKeydown);
   document.querySelector('body').classList.remove('.modal-open');
+}
+
+function clearForm () {
   scalePhotoValue.value = '100%';
   form.querySelector('#effect-none').checked = true;
+  slidetField.classList.add('hidden');
   form.querySelector('.text__hashtags').textContent = '';
   form.querySelector('.text__description').textContent = '';
   photoPreview.style.transform = 'scale(1)';
@@ -248,15 +263,15 @@ uploadField.addEventListener('change', (evt) => {
   photoPreview.src = URL.createObjectURL(event.target.files[0]);
   openUploadOverlay();
 });
-/*
+
 const createLoadingMessage = function () {
   const loadingMessageTemplate = document.querySelector('#messages').content;
   const loadingMessageElement = loadingMessageTemplate.cloneNode(true);
   form.appendChild(loadingMessageElement);
 };
+
 createLoadingMessage();
 form.querySelector('.img-upload__message').style.display = 'none';
-
 
 const blockSubmitButton = () => {
   submitFormButton.disabled = true;
@@ -269,35 +284,36 @@ const unblockSubmitButton = () => {
   form.querySelector('.img-upload__message').style.display = 'none';
   submitFormButton.style.display = 'block';
   submitFormButton.disabled = false;
-};*/
+};
 
 const setFormSubmit = () => {
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
-    //const success = 'success';
-    //const error = 'error';
-    pristine.validate();
-    closeUploadOverlay();
-    /*const isValid =  pristine.validate();
+    const success = 'success';
+    const error = 'error';
+    const isValid =  pristine.validate();
     if (isValid) {
       blockSubmitButton();
       sendData(
         () => {
-          showMessage(success);
           unblockSubmitButton();
           closeUploadOverlay();
+          clearForm();
+          showMessage(success);
         },
         () => {
-          showMessage(error);
           unblockSubmitButton();
+          closeUploadOverlay();
+          showMessage(error);
         },
         new FormData(evt.target));
-    }*/
+    }
   });
 };
 
 cancelUpload.addEventListener('click', () => {
   closeUploadOverlay();
+  clearForm();
 });
 
 export {setFormSubmit};

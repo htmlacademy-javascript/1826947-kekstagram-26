@@ -1,19 +1,26 @@
-/*import {getRandomNumber} from './util.js';
-
-import {drawPicture} from './picture.js';
-
-import {getData} from './fetch.js';
-
-getData(drawPicture);
-
-const filterField = document.querySelector('.img-filters');
-
-const filterForm = filterField.querySelector('.img-filters__form');
+import {getRandomNumber} from './util.js';
 
 const SHOW_RANDOM_COUNT = 10;
 
-const showRandomPictures =  (picturesArray) => {
+const showRandomPhotosArray = (array) => {
   for (let i = 0; i < SHOW_RANDOM_COUNT; i++) {
-    const shownElement = (getRandomNumber(picturesArray[i], picturesArray.length - 1));
+    const newArray = [];
+    const randomArrayElement = getRandomNumber([i], array.length - 1);
+    const newElement = array[randomArrayElement];
+    if (newElement >= array.length) {
+      let j = newElement - array.length + 1;
+      while (j--) {
+        array.push(undefined);
+      }
+    }
+    array.splice(newElement, 0, array.splice(randomArrayElement, 1)[i]);
+    newArray[i] = array[i];
+    return newArray;
   }
-}*/
+};
+
+const compareCommentsLenght = ((a,b,) => parseFloat(b.comments.length) - parseFloat(a.comments.length));
+
+const comparePhotosId = ((a,b,) => parseFloat(a.id) - parseFloat(b.id));
+
+export {showRandomPhotosArray, compareCommentsLenght, comparePhotosId};
