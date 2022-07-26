@@ -6,8 +6,6 @@ import {showAlert} from './util.js';
 
 import {getData} from './fetch.js';
 
-import './filter.js';
-
 getData(drawPicture, showAlert);
 
 setFormSubmit();

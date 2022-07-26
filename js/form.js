@@ -3,15 +3,11 @@ import {isEscapeKey,showMessage} from './util.js';
 import {sendData} from './fetch.js';
 
 const form = document.querySelector('#upload-select-image');
+
 const submitFormButton = form.querySelector('#upload-submit');
-
 const uploadField = form.querySelector('#upload-file');
-
 const photoPreview = form.querySelector('.img-upload__preview img');
-
-
 const uploadOverlay = form.querySelector('.img-upload__overlay');
-
 const cancelUpload = form.querySelector('#upload-cancel');
 
 const scaleControl = form.querySelector('.img-upload__scale');
@@ -39,6 +35,48 @@ const MIN_SCALE = 25;
 const MAX_SCALE = 100;
 const STEP = 25;
 
+const slidetField = form.querySelector('.img-upload__effect-level');
+const depthEffectSlider = form.querySelector('.effect-level__slider');
+const depthEffectValue = document.querySelector('.effect-level__value');
+
+const noneEffect = form.querySelector('#effect-none');
+const chromeEffect = form.querySelector('#effect-chrome');
+const sepiaEffect = form.querySelector('#effect-sepia');
+const marvinEffect = form.querySelector('#effect-marvin');
+const phobosEffect = form.querySelector('#effect-phobos');
+const heatEffect = form.querySelector('#effect-heat');
+
+const showSliderField = function () {
+  if (slidetField.classList.contains('hidden')) {
+    slidetField.classList.remove('hidden');
+  }
+};
+
+const hashtagsField = form.querySelector('.text__hashtags');
+const descriptionsField = form.querySelector('.text__description');
+
+const createLoadingMessage = function () {
+  const loadingMessageTemplate = document.querySelector('#messages').content;
+  const loadingMessageElement = loadingMessageTemplate.cloneNode(true);
+  form.appendChild(loadingMessageElement);
+};
+
+const blockSubmitButton = () => {
+  submitFormButton.disabled = true;
+  submitFormButton.style.display = 'none';
+  form.querySelector('.img-upload__message').style.display = 'block';
+};
+
+const unblockSubmitButton = () => {
+  form.querySelector('.img-upload__message').style.display = 'none';
+  submitFormButton.style.display = 'initial';
+  submitFormButton.disabled = false;
+};
+
+slidetField.classList.add('hidden');
+scalePhotoValue.value = '100%';
+photoPreview.style.transform = 'scale(1)';
+
 scaleControl.addEventListener('click', (evt) => {
   if (evt.target === smallerScaleButton) {
     if (parseInt(scalePhotoValue.value, 10) > MIN_SCALE) {
@@ -55,11 +93,6 @@ scaleControl.addEventListener('click', (evt) => {
     return scalePhotoValue.value;
   }
 });
-
-const slidetField = form.querySelector('.img-upload__effect-level');
-slidetField.classList.add('hidden');
-const depthEffectSlider = form.querySelector('.effect-level__slider');
-const depthEffectValue = document.querySelector('.effect-level__value');
 
 noUiSlider.create(depthEffectSlider, {
   range: {
@@ -81,13 +114,6 @@ noUiSlider.create(depthEffectSlider, {
     },
   },
 });
-
-const noneEffect = form.querySelector('#effect-none');
-const chromeEffect = form.querySelector('#effect-chrome');
-const sepiaEffect = form.querySelector('#effect-sepia');
-const marvinEffect = form.querySelector('#effect-marvin');
-const phobosEffect = form.querySelector('#effect-phobos');
-const heatEffect = form.querySelector('#effect-heat');
 
 depthEffectSlider.noUiSlider.on('update', () => {
   depthEffectValue.value = (depthEffectSlider.noUiSlider.get());
@@ -113,12 +139,6 @@ depthEffectSlider.noUiSlider.on('update', () => {
       break;
   }
 });
-
-const showSliderField = function () {
-  if (slidetField.classList.contains('hidden')) {
-    slidetField.classList.remove('hidden');
-  }
-};
 
 noneEffect.addEventListener('click', () => {
   photoPreview.className = '';
@@ -193,8 +213,6 @@ heatEffect.addEventListener('change', () => {
   photoPreview.classList.add(`effects__preview--${heatEffect.value}`);
 });
 
-const hashtagsField = form.querySelector('.text__hashtags');
-
 function validateHashtags (hashtag) {
   if (hashtagsField.textContent === '') {
     return true;
@@ -216,13 +234,12 @@ function validateHashtags (hashtag) {
   }
 }
 
+
 pristine.addValidator(
   form.querySelector('.text__hashtags'),
   validateHashtags,
   'Хэштегов не должно быть больше 5. Каждый из них должен начинаться с #, не быть пустым, не содержать более 20 символов, не содержать спецсимволы (@, $, % и т. п.), не содержать символы пунктуации и пробелы. Не может быть 2-х одинаковы хэштега.'
 );
-
-const descriptionsField = form.querySelector('.text__description');
 
 function validateComments (value) {
   if (descriptionsField.textContent === '') {
@@ -259,32 +276,13 @@ function clearForm () {
 }
 
 uploadField.addEventListener('change', (evt) => {
-  const file = evt.target.files[0];
-  photoPreview.src = URL.createObjectURL(file);
+  evt.preventDefault();
+  photoPreview.src = URL.createObjectURL(evt.target.files[0]);
   openUploadOverlay();
 });
 
-const createLoadingMessage = function () {
-  const loadingMessageTemplate = document.querySelector('#messages').content;
-  const loadingMessageElement = loadingMessageTemplate.cloneNode(true);
-  form.appendChild(loadingMessageElement);
-};
-
 createLoadingMessage();
 form.querySelector('.img-upload__message').style.display = 'none';
-
-const blockSubmitButton = () => {
-  submitFormButton.disabled = true;
-  submitFormButton.style.display = 'none';
-  form.querySelector('.img-upload__message').style.display = 'block';
-};
-
-
-const unblockSubmitButton = () => {
-  form.querySelector('.img-upload__message').style.display = 'none';
-  submitFormButton.style.display = 'block';
-  submitFormButton.disabled = false;
-};
 
 const setFormSubmit = () => {
   form.addEventListener('submit', (evt) => {

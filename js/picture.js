@@ -1,17 +1,13 @@
-import {drawBigPicture} from './bigpicture.js';
-
+import {drawBigPicture} from './big-picture.js';
 import {showRandomPhotosArray,
   compareCommentsLenght,
   comparePhotosId} from './filter.js';
 
 const userDialog = document.querySelector('.pictures');
-
 const similarPictureTemplate = document.querySelector('#picture').content;
 
 const photosFilterField = document.querySelector('.img-filters');
-
 const filterForm = photosFilterField.querySelector('.img-filters__form');
-
 const allFilterButtons = filterForm.querySelectorAll('.img-filters__button');
 
 const defaultFilterButton = filterForm.querySelector('#filter-default');
@@ -83,6 +79,5 @@ const drawPicture = function createClone(photos) {
     defaultFilterButton.classList.add('img-filters__button--active');
   });
 };
-
 
 export {drawPicture};
