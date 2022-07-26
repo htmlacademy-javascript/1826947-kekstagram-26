@@ -5,7 +5,7 @@ const bigPictureCloseButton = bigPictureOverlay.querySelector('#picture-cancel')
 const commentsArray = bigPictureOverlay.querySelector('.social__comments');
 const showMoreCommentsButton = bigPictureOverlay.querySelector('.social__comments-loader');
 
-const onPopupEscKeydown = (evt) => {
+const onPopupEscKeydownEvent = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
     closeBigPictureOverlay();
@@ -102,13 +102,13 @@ const drawBigPicture = function (photo) {
 
 function openBigPictureOverlay () {
   bigPictureOverlay.classList.remove('hidden');
-  document.addEventListener('keydown', onPopupEscKeydown);
+  document.addEventListener('keydown', onPopupEscKeydownEvent);
   document.querySelector('body').classList.add('modal-open');
 }
 
 function closeBigPictureOverlay () {
   bigPictureOverlay.classList.add('hidden');
-  document.removeEventListener('keydown', onPopupEscKeydown);
+  document.removeEventListener('keydown', onPopupEscKeydownEvent);
   document.querySelector('body').classList.remove('modal-open');
 }
 

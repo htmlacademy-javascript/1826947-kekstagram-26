@@ -2,6 +2,10 @@ import {getRandomNumber} from './util.js';
 
 const SHOW_RANDOM_COUNT = 10;
 
+const compareCommentsLenght = ((a,b) => parseFloat(b.comments.length) - parseFloat(a.comments.length));
+
+const comparePhotosId = ((a,b) => parseFloat(a.id) - parseFloat(b.id));
+
 const showRandomPhotosArray = (array) => {
   for (let i = 0; i < SHOW_RANDOM_COUNT; i++) {
     const newArray = [];
@@ -18,9 +22,5 @@ const showRandomPhotosArray = (array) => {
     return newArray;
   }
 };
-
-const compareCommentsLenght = ((a,b,) => parseFloat(b.comments.length) - parseFloat(a.comments.length));
-
-const comparePhotosId = ((a,b,) => parseFloat(a.id) - parseFloat(b.id));
 
 export {showRandomPhotosArray, compareCommentsLenght, comparePhotosId};
