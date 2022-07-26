@@ -259,8 +259,8 @@ function clearForm () {
 }
 
 uploadField.addEventListener('change', (evt) => {
-  evt.preventDefault();
-  photoPreview.src = URL.createObjectURL(event.target.files[0]);
+  const file = evt.target.files[0];
+  photoPreview.src = URL.createObjectURL(file);
   openUploadOverlay();
 });
 
