@@ -45,6 +45,12 @@ const showMessage = (result) => {
   closeMessageButton.addEventListener('click', () => {
     document.querySelector(`.${result}`).remove();
   });
+
+  document.addEventListener('click', (evt) => {
+    if (evt.target.className === result) {
+      document.querySelector(`.${result}`).remove();
+    }
+  });
 };
 
 export {getRandomNumber, isEscapeKey, showMessage, showAlert};
