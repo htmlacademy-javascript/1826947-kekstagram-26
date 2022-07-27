@@ -265,7 +265,6 @@ function openUploadOverlay () {
 
 function closeUploadOverlay () {
   uploadOverlay.classList.add('hidden');
-  //photoPreview.src = 'img/upload-default-image.jpg';
   document.removeEventListener('keydown', onPopupEscKeydown);
   document.querySelector('body').classList.remove('.modal-open');
   return (scalePhotoValue.value, photoPreview.style.transform);
@@ -287,9 +286,6 @@ function clearForm () {
 uploadField.addEventListener('change', (evt) => {
   evt.preventDefault();
   photoPreview.src = URL.createObjectURL(evt.target.files[0]);
-});
-
-uploadField.addEventListener('click', () => {
   openUploadOverlay();
 });
 
