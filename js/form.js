@@ -18,7 +18,13 @@ const biggerScaleButton = scaleControl.querySelector('.scale__control--bigger');
 scalePhotoValue.value = '100%';
 photoPreview.style.transform = 'scale(1)';
 
+const hashtagsField = form.querySelector('.text__hashtags');
+const descriptionsField = form.querySelector('.text__description');
+
 const onPopupEscKeydown = (evt) => {
+  if (hashtagsField === document.activeElement || descriptionsField === document.activeElement) {
+    return evt;
+  }
   if (isEscapeKey(evt)) {
     evt.preventDefault();
     closeUploadOverlay();
@@ -51,9 +57,6 @@ const showSliderField = function () {
     slidetField.classList.remove('hidden');
   }
 };
-
-const hashtagsField = form.querySelector('.text__hashtags');
-const descriptionsField = form.querySelector('.text__description');
 
 const createLoadingMessage = function () {
   const loadingMessageTemplate = document.querySelector('#messages').content;
@@ -262,8 +265,10 @@ function openUploadOverlay () {
 
 function closeUploadOverlay () {
   uploadOverlay.classList.add('hidden');
+  //photoPreview.src = 'img/upload-default-image.jpg';
   document.removeEventListener('keydown', onPopupEscKeydown);
   document.querySelector('body').classList.remove('.modal-open');
+  return (scalePhotoValue.value, photoPreview.style.transform);
 }
 
 function clearForm () {
@@ -273,11 +278,18 @@ function clearForm () {
   form.querySelector('.text__hashtags').textContent = '';
   form.querySelector('.text__description').textContent = '';
   photoPreview.style.transform = 'scale(1)';
+  if (photoPreview.classList !== '') {
+    photoPreview.style.filter = 'none';
+    photoPreview.classList.remove();
+  }
 }
 
 uploadField.addEventListener('change', (evt) => {
   evt.preventDefault();
   photoPreview.src = URL.createObjectURL(evt.target.files[0]);
+});
+
+uploadField.addEventListener('click', () => {
   openUploadOverlay();
 });
 
@@ -311,7 +323,6 @@ const setFormSubmit = () => {
 
 cancelUpload.addEventListener('click', () => {
   closeUploadOverlay();
-  clearForm();
 });
 
 export {setFormSubmit};

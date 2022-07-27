@@ -14,6 +14,18 @@ const defaultFilterButton = filterForm.querySelector('#filter-default');
 const randomFilterButton = filterForm.querySelector('#filter-random');
 const mostDiscussedFilterButton = filterForm.querySelector('#filter-discussed');
 
+const debounce = (oneFunction, time) => {
+  let timeout;
+  return function () {
+    const fucntionCall  = () => {
+      oneFunction.apply(this, arguments);
+    };
+
+    clearTimeout(timeout);
+    timeout = setTimeout(fucntionCall, time);
+  };
+};
+
 function checkActiveButton () {
   allFilterButtons.forEach((filter) => {
     filter.classList.remove('img-filters__button--active');
@@ -53,29 +65,23 @@ const drawPicture = function createClone(photos) {
   randomFilterButton.addEventListener('click', () => {
     checkActiveButton();
     showRandomPhotosArray(photos);
-    setTimeout(() => {
-      drawPicture(photos);
-      const allDrawnPictures = document.querySelectorAll('.picture');
-      for (let i = 10; i < allDrawnPictures.length - 1; i++){
-        allDrawnPictures[i].remove();
-      }
-    }, 500);
+    debounce(drawPicture(photos), 500);
+    const allDrawnPictures = document.querySelectorAll('.picture');
+    for (let i = 10; i < allDrawnPictures.length - 1; i++){
+      allDrawnPictures[i].remove();
+    }
     randomFilterButton.classList.add('img-filters__button--active');
   });
 
   mostDiscussedFilterButton.addEventListener('click', () => {
     checkActiveButton();
-    setTimeout(() => {
-      drawPicture(photos.sort(compareCommentsLenght));
-    }, 500);
+    debounce(drawPicture(photos.sort(compareCommentsLenght)), 500);
     mostDiscussedFilterButton.classList.add('img-filters__button--active');
   });
 
   defaultFilterButton.addEventListener('click', () => {
     checkActiveButton();
-    setTimeout(() => {
-      drawPicture(photos.sort(comparePhotosId));
-    }, 500);
+    debounce(drawPicture(photos.sort(comparePhotosId)), 500);
     defaultFilterButton.classList.add('img-filters__button--active');
   });
 };
