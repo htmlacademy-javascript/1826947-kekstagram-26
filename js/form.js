@@ -1,5 +1,8 @@
-import {isEscapeKey,showMessage} from './util.js';
+const MIN_SCALE = 25;
+const MAX_SCALE = 100;
+const STEP = 25;
 
+import {isEscapeKey,showMessage} from './util.js';
 import {sendData} from './fetch.js';
 
 const form = document.querySelector('#upload-select-image');
@@ -14,9 +17,6 @@ const scaleControl = form.querySelector('.img-upload__scale');
 const scalePhotoValue = scaleControl.querySelector('.scale__control--value');
 const smallerScaleButton = scaleControl.querySelector('.scale__control--smaller');
 const biggerScaleButton = scaleControl.querySelector('.scale__control--bigger');
-
-scalePhotoValue.value = '100%';
-photoPreview.style.transform = 'scale(1)';
 
 const hashtagsField = form.querySelector('.text__hashtags');
 const descriptionsField = form.querySelector('.text__description');
@@ -36,10 +36,6 @@ const pristine = new Pristine(form, {
   errorTextParent: 'img-upload__text',
   errorTextTag: 'span'
 });
-
-const MIN_SCALE = 25;
-const MAX_SCALE = 100;
-const STEP = 25;
 
 const slidetField = form.querySelector('.img-upload__effect-level');
 const depthEffectSlider = form.querySelector('.effect-level__slider');
@@ -75,6 +71,9 @@ const unblockSubmitButton = () => {
   submitFormButton.style.display = 'initial';
   submitFormButton.disabled = false;
 };
+
+scalePhotoValue.value = '100%';
+photoPreview.style.transform = 'scale(1)';
 
 slidetField.classList.add('hidden');
 scalePhotoValue.value = '100%';
@@ -119,8 +118,8 @@ noUiSlider.create(depthEffectSlider, {
 });
 
 depthEffectSlider.noUiSlider.on('update', () => {
-  depthEffectValue.value = (depthEffectSlider.noUiSlider.get());
   const currentEffect = form.querySelector('[name="effect"]:checked').value;
+  depthEffectValue.value = (depthEffectSlider.noUiSlider.get());
   switch(currentEffect) {
     case 'chrome':
       photoPreview.style.filter = `grayscale(${depthEffectValue.value})`;
@@ -217,15 +216,9 @@ heatEffect.addEventListener('change', () => {
 });
 
 function validateHashtags (hashtag) {
-  if (hashtagsField.textContent === '') {
-    return true;
-  }
   const re = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
   const hashtagArray = hashtag.split(' ');
   for (let i = 0; i < hashtagArray.length; i++) {
-    if (!re.test(hashtagArray[i])) {
-      return false;
-    }
     const lowerCasehashtagArray = [];
     hashtagArray.forEach((hashtagElement) => {
       lowerCasehashtagArray.push(hashtagElement.toLowerCase());
@@ -233,10 +226,15 @@ function validateHashtags (hashtag) {
     if (lowerCasehashtagArray[i + 1] === lowerCasehashtagArray[i]) {
       return false;
     }
-    return hashtagArray.length <= 5;
+    if (hashtag.length === 0) {
+      return true;
+    }
+    if (!re.test(hashtagArray[i])) {
+      return false;
+    }
   }
+  return hashtagArray.length <= 5;
 }
-
 
 pristine.addValidator(
   form.querySelector('.text__hashtags'),
@@ -245,7 +243,7 @@ pristine.addValidator(
 );
 
 function validateComments (value) {
-  if (descriptionsField.textContent === '') {
+  if (value.length === 0) {
     return true;
   }
   return value.length <= 140;
@@ -265,7 +263,7 @@ function openUploadOverlay () {
 
 function closeUploadOverlay () {
   uploadOverlay.classList.add('hidden');
-  //photoPreview.src = 'img/upload-default-image.jpg';
+  uploadField.value = '';
   document.removeEventListener('keydown', onPopupEscKeydown);
   document.querySelector('body').classList.remove('.modal-open');
   return (scalePhotoValue.value, photoPreview.style.transform);
@@ -278,18 +276,16 @@ function clearForm () {
   form.querySelector('.text__hashtags').textContent = '';
   form.querySelector('.text__description').textContent = '';
   photoPreview.style.transform = 'scale(1)';
-  if (photoPreview.classList !== '') {
+  if (photoPreview.classList.length !== 0) {
+    const addedClass = photoPreview.className;
     photoPreview.style.filter = 'none';
-    photoPreview.classList.remove();
+    photoPreview.classList.remove(`${addedClass}`);
   }
 }
 
 uploadField.addEventListener('change', (evt) => {
   evt.preventDefault();
   photoPreview.src = URL.createObjectURL(evt.target.files[0]);
-});
-
-uploadField.addEventListener('click', () => {
   openUploadOverlay();
 });
 
@@ -307,8 +303,8 @@ const setFormSubmit = () => {
       sendData(
         () => {
           unblockSubmitButton();
-          closeUploadOverlay();
           clearForm();
+          closeUploadOverlay();
           showMessage(success);
         },
         () => {

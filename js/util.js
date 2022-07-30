@@ -1,17 +1,8 @@
-function getRandomNumber (minNumber, maxNumber) {
-  minNumber = Math.ceil(minNumber);   // для вычислкения наименьшего целого числа, которое больше, или равно заданному числу
-  maxNumber = Math.ceil(maxNumber);   //для вычислкения наибольшего целого числа, которое больше, или равно заданному числу
-
-  if (maxNumber <= minNumber) {
-    return (maxNumber++);
-  }
-
-  return Math.floor(Math.random() * (maxNumber - minNumber)) + minNumber;
-}
+const ALERT_SHOW_TIME = 5000;
 
 const isEscapeKey = ((evt) => evt.key === 'Escape');
 
-const ALERT_SHOW_TIME = 5000;
+const body = document.querySelector('body');
 
 const showAlert = (message) => {
   const alertBox = document.createElement('div');
@@ -29,28 +20,54 @@ const showAlert = (message) => {
   alertBox.textContent = message;
 
   document.body.append(alertBox);
-
-
   setTimeout(() => {
     alertBox.remove();
   }, ALERT_SHOW_TIME);
 };
 
+const debounce = (oneFunction, time) => {
+  let timeout;
+  return function () {
+    const fucntionCall  = () => {
+      oneFunction.apply(this, arguments);
+    };
+
+    clearTimeout(timeout);
+    timeout = setTimeout(fucntionCall, time);
+  };
+};
+
 const showMessage = (result) => {
   const messageTemplate = document.querySelector(`#${result}`).content;
   const messageElement = messageTemplate.cloneNode(true);
-  document.querySelector('body').appendChild(messageElement);
+  const closeMessageButton = messageElement.querySelector(`.${result}__button`);
+  const CloseMessageHandler = (evt) => {
+    if (evt.target === body.querySelector(`.${result}__inner`) ||
+      evt.target === body.querySelector(`.${result}__title`)) {
+      return evt;
+    }
+    body.querySelector(`.${result}`).remove();
+    document.removeEventListener('click', CloseMessageHandler);
+  };
 
-  const closeMessageButton = document.querySelector(`.${result}__button`);
+  body.appendChild(messageElement);
+  document.addEventListener('click', CloseMessageHandler);
+
   closeMessageButton.addEventListener('click', () => {
     document.querySelector(`.${result}`).remove();
-  });
-
-  document.addEventListener('click', (evt) => {
-    if (evt.target.className === result) {
-      document.querySelector(`.${result}`).remove();
-    }
+    document.removeEventListener('click', CloseMessageHandler);
   });
 };
 
-export {getRandomNumber, isEscapeKey, showMessage, showAlert};
+function getRandomNumber (minNumber, maxNumber) {
+  minNumber = Math.ceil(minNumber);
+  maxNumber = Math.ceil(maxNumber);
+
+  if (maxNumber <= minNumber) {
+    return (maxNumber++);
+  }
+
+  return Math.floor(Math.random() * (maxNumber - minNumber)) + minNumber;
+}
+
+export {getRandomNumber, isEscapeKey, showMessage, showAlert, debounce};
