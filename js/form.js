@@ -83,7 +83,7 @@ scaleControl.addEventListener('click', (evt) => {
   const changeScale = function (element) {
     scalePhotoValue.value = `${parseInt(scalePhotoValue.value, 10) + element}%`;
     photoPreview.style.transform = `scale(${parseInt(scalePhotoValue.value, 10) / 100})`;
-  }
+  };
 
   if (evt.target === smallerScaleButton) {
     if (parseInt(scalePhotoValue.value, 10) > MIN_SCALE) {
