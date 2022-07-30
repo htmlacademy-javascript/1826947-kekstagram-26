@@ -1,4 +1,5 @@
 import {drawBigPicture} from './big-picture.js';
+import {debounce} from './util.js';
 import {showRandomPhotosArray,
   compareCommentsLenght,
   comparePhotosId} from './filter.js';
@@ -13,18 +14,6 @@ const allFilterButtons = filterForm.querySelectorAll('.img-filters__button');
 const defaultFilterButton = filterForm.querySelector('#filter-default');
 const randomFilterButton = filterForm.querySelector('#filter-random');
 const mostDiscussedFilterButton = filterForm.querySelector('#filter-discussed');
-
-const debounce = (oneFunction, time) => {
-  let timeout;
-  return function () {
-    const fucntionCall  = () => {
-      oneFunction.apply(this, arguments);
-    };
-
-    clearTimeout(timeout);
-    timeout = setTimeout(fucntionCall, time);
-  };
-};
 
 function checkActiveButton () {
   allFilterButtons.forEach((filter) => {
@@ -62,27 +51,52 @@ const drawPicture = function createClone(photos) {
   });
   photosFilterField.classList.remove('img-filters--inactive');
 
-  randomFilterButton.addEventListener('click', () => {
+  /*function getPhotosById () {
     checkActiveButton();
-    showRandomPhotosArray(photos);
-    debounce(drawPicture(photos), 500);
-    const allDrawnPictures = document.querySelectorAll('.picture');
-    for (let i = 10; i < allDrawnPictures.length - 1; i++){
-      allDrawnPictures[i].remove();
-    }
-    randomFilterButton.classList.add('img-filters__button--active');
-  });
-
-  mostDiscussedFilterButton.addEventListener('click', () => {
-    checkActiveButton();
-    debounce(drawPicture(photos.sort(compareCommentsLenght)), 500);
-    mostDiscussedFilterButton.classList.add('img-filters__button--active');
-  });
-
-  defaultFilterButton.addEventListener('click', () => {
-    checkActiveButton();
-    debounce(drawPicture(photos.sort(comparePhotosId)), 500);
+    const arrayByPhotosId = debounce(drawPicture(photos.sort(comparePhotosId)), 500);
+    arrayByPhotosId;
     defaultFilterButton.classList.add('img-filters__button--active');
+    defaultFilterButton.removeEventListener('click', getPhotosById);
+  }
+
+  function getMostDiscussedPhotos () {
+    checkActiveButton();
+    const arrayByMostDiscussedPhotos = debounce(drawPicture(photos.sort(compareCommentsLenght)), 500);
+    arrayByMostDiscussedPhotos;
+    mostDiscussedFilterButton.classList.add('img-filters__button--active');
+    mostDiscussedFilterButton.removeEventListener('click', getMostDiscussedPhotos);
+  }
+
+  function getRandomPhotos () {
+    checkActiveButton();
+    const arrayWithRandomPhotos = debounce(drawPicture(showRandomPhotosArray(photos)), 500);
+    arrayWithRandomPhotos;
+    randomFilterButton.classList.add('img-filters__button--active');
+    randomFilterButton.removeEventListener('click', getRandomPhotos);
+  }*/
+
+  defaultFilterButton.addEventListener('click', function getPhotosById () {
+    checkActiveButton();
+    const arrayByPhotosId = debounce(drawPicture(photos.sort(comparePhotosId)), 500);
+    arrayByPhotosId;
+    defaultFilterButton.classList.add('img-filters__button--active');
+    defaultFilterButton.removeEventListener('click', getPhotosById);
+  });
+
+  mostDiscussedFilterButton.addEventListener('click', function getMostDiscussedPhotos () {
+    checkActiveButton();
+    const arrayByMostDiscussedPhotos = debounce(drawPicture(photos.sort(compareCommentsLenght)), 500);
+    arrayByMostDiscussedPhotos;
+    mostDiscussedFilterButton.classList.add('img-filters__button--active');
+    mostDiscussedFilterButton.removeEventListener('click', getMostDiscussedPhotos);
+  });
+
+  randomFilterButton.addEventListener('click', function getRandomPhotos () {
+    checkActiveButton();
+    const arrayWithRandomPhotos = debounce(drawPicture(showRandomPhotosArray(photos)), 500);
+    arrayWithRandomPhotos;
+    randomFilterButton.classList.add('img-filters__button--active');
+    randomFilterButton.removeEventListener('click', getRandomPhotos);
   });
 };
 

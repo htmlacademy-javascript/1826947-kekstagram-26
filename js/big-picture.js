@@ -1,3 +1,5 @@
+const SHOW_STEP_COMMENTS = 5;
+
 import {isEscapeKey} from './util.js';
 
 const bigPictureOverlay = document.querySelector('.big-picture');
@@ -14,15 +16,15 @@ const onPopupEscKeydownEvent = (evt) => {
 
 const createComment = function (comment) {
   const commentElement = document.createElement('li');
+  const commentAvatar = document.createElement('img');
+  const commentText = document.createElement('p');
   commentElement.classList.add('social__comment');
   commentElement.style.width = 35;
   commentElement.style.height = 35;
-  const commentAvatar = document.createElement('img');
   commentAvatar.classList.add('social__picture');
   commentAvatar.src = comment.avatar;
   commentAvatar.alt = comment.name;
   commentElement.appendChild(commentAvatar);
-  const commentText = document.createElement('p');
   commentText.classList.add('social__text');
   commentText.textContent = comment.message;
   commentElement.appendChild(commentText);
@@ -49,7 +51,6 @@ const drawBigPicture = function (photo) {
       commentsArray.appendChild(newComment);
     }
 
-    const SHOW_STEP_COMMENTS = 5;
     const allComments = commentsArray.querySelectorAll('.social__comment');
     const commentCountField = bigPictureOverlay.querySelector('.social__comment-count');
 

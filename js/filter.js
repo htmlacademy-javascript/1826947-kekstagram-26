@@ -8,19 +8,14 @@ const comparePhotosId = ((a,b) => parseFloat(a.id) - parseFloat(b.id));
 
 const showRandomPhotosArray = (array) => {
   for (let i = 0; i < SHOW_RANDOM_COUNT; i++) {
-    const newArray = [];
-    const randomArrayElement = getRandomNumber([i], array.length - 1);
-    const newElement = array[randomArrayElement];
-    if (newElement >= array.length) {
-      let j = newElement - array.length + 1;
-      while (j--) {
-        array.push(undefined);
-      }
-    }
-    array.splice(newElement, 0, array.splice(randomArrayElement, 1)[i]);
-    newArray[i] = array[i];
-    return newArray;
+    const randomElementNumber = getRandomNumber(0, array.length - 1);
+    const newArrayElement = array[randomElementNumber];
+
+    array.splice(newArrayElement, 0, array.splice(randomElementNumber, 1)[0]);
   }
+
+  const newArray = array.slice(0, 10);
+  return newArray;
 };
 
 export {showRandomPhotosArray, compareCommentsLenght, comparePhotosId};
