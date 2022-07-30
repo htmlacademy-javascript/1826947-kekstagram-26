@@ -80,17 +80,20 @@ scalePhotoValue.value = '100%';
 photoPreview.style.transform = 'scale(1)';
 
 scaleControl.addEventListener('click', (evt) => {
+  const changeScale = function (element) {
+    scalePhotoValue.value = `${parseInt(scalePhotoValue.value, 10) + element}%`;
+    photoPreview.style.transform = `scale(${parseInt(scalePhotoValue.value, 10) / 100})`;
+  }
+
   if (evt.target === smallerScaleButton) {
     if (parseInt(scalePhotoValue.value, 10) > MIN_SCALE) {
-      scalePhotoValue.value = `${parseInt(scalePhotoValue.value, 10) - STEP}%`;
-      photoPreview.style.transform = `scale(${parseInt(scalePhotoValue.value, 10) / 100})`;
+      changeScale(-STEP);
     }
     return scalePhotoValue.value;
   }
   if (evt.target === biggerScaleButton) {
     if (parseInt(scalePhotoValue.value, 10) < MAX_SCALE) {
-      scalePhotoValue.value = `${parseInt(scalePhotoValue.value, 10) + STEP}%`;
-      photoPreview.style.transform = `scale(${parseInt(scalePhotoValue.value, 10) / 100})`;
+      changeScale(STEP);
     }
     return scalePhotoValue.value;
   }
