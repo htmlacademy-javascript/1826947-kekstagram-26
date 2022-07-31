@@ -5,7 +5,6 @@ import {getRandomNumber, debounce} from './util.js';
 import {drawPicture} from './picture.js';
 
 const filterForm = document.querySelector('.img-filters__form');
-const allFilterButtons = filterForm.querySelectorAll('.img-filters__button');
 const defaultFilterButton = filterForm.querySelector('#filter-default');
 const randomFilterButton = filterForm.querySelector('#filter-random');
 const mostDiscussedFilterButton = filterForm.querySelector('#filter-discussed');
@@ -25,16 +24,14 @@ const showRandomPhotosArray = (array) => {
 };
 
 function checkActiveButton () {
-  allFilterButtons.forEach((filter) => {
-    filter.classList.remove('img-filters__button--active');
-  });
+  const activeButton = filterForm.querySelector('.img-filters__button--active');
+  activeButton.classList.remove('img-filters__button--active');
 }
 
 const filterPhotos = (photos) => {
   defaultFilterButton.addEventListener('click', () => {
     checkActiveButton();
     debounce(drawPicture(photos.sort(comparePhotosId)), DEBOUNCE_TIMER);
-
     defaultFilterButton.classList.add('img-filters__button--active');
   });
 
