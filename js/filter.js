@@ -23,26 +23,26 @@ const showRandomPhotosArray = (array) => {
   return newArray;
 };
 
-function checkActiveButton () {
+function deactivateActiveButton () {
   const activeButton = filterForm.querySelector('.img-filters__button--active');
   activeButton.classList.remove('img-filters__button--active');
 }
 
 const filterPhotos = (photos) => {
   defaultFilterButton.addEventListener('click', () => {
-    checkActiveButton();
+    deactivateActiveButton();
     debounce(drawPicture(photos.sort(comparePhotosId)), DEBOUNCE_TIMER);
     defaultFilterButton.classList.add('img-filters__button--active');
   });
 
   mostDiscussedFilterButton.addEventListener('click', () => {
-    checkActiveButton();
+    deactivateActiveButton();
     debounce(drawPicture(photos.sort(compareCommentsLenght)), DEBOUNCE_TIMER);
     mostDiscussedFilterButton.classList.add('img-filters__button--active');
   });
 
   randomFilterButton.addEventListener('click', () => {
-    checkActiveButton();
+    deactivateActiveButton();
     debounce(drawPicture(showRandomPhotosArray(photos.slice())), DEBOUNCE_TIMER);
     randomFilterButton.classList.add('img-filters__button--active');
   });
